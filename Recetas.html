@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroMaster - Recetas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="logo-box">MICRO<br>MASTER</div>
+                </div>
+                <p class="sidebar-title">MÓDULOS</p>
+                <nav class="menu">
+                    <ul>
+                        <li><a href="Recetas.html" class="active">Recetas</a></li>
+                        <li><a href="Configuracion.html">Configuración</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <p class="footer-brand">MicroMaster</p>
+                <p class="footer-version">Insumos Alimentarios v1.0</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-top">
+                <h1 class="page-title">RECETAS</h1>
+                <span class="date-badge">23 de abr de 2026</span>
+            </div>
+
+            <section class="stats-grid">
+                <article class="kpi-card">
+                    <p class="kpi-label">Total Recetas</p>
+                    <p id="kpiTotal" class="kpi-value">0</p>
+                    <p class="kpi-note">en sistema</p>
+                </article>
+                <article class="kpi-card">
+                    <p class="kpi-label">Categorías</p>
+                    <p id="kpiCategorias" class="kpi-value">0</p>
+                    <p class="kpi-note">activas</p>
+                </article>
+                <article class="kpi-card">
+                    <p class="kpi-label">Completas</p>
+                    <p id="kpiCompletas" class="kpi-value value-green">0</p>
+                    <p class="kpi-note">5+ insumos</p>
+                </article>
+                <article class="kpi-card">
+                    <p class="kpi-label">Básicas</p>
+                    <p id="kpiBasicas" class="kpi-value value-yellow">0</p>
+                    <p class="kpi-note">3-4 insumos</p>
+                </article>
+                <article class="kpi-card">
+                    <p class="kpi-label">Costo Promedio</p>
+                    <p id="kpiCosto" class="kpi-value kpi-value-cost">$0.00</p>
+                    <p class="kpi-note">por receta</p>
+                </article>
+            </section>
+
+            <div class="toolbar">
+                <input id="searchInput" class="search-input" type="text" placeholder="Buscar receta, categoría o ingrediente...">
+                <label class="sr-only" for="categoryFilter">Filtrar por categoría</label>
+                <select id="categoryFilter">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <label class="sr-only" for="statusFilter">Filtrar por estado</label>
+                <select id="statusFilter">
+                    <option value="">Todos los estados</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="bajo">Básica</option>
+                    <option value="agotado">Simple</option>
+                </select>
+                <button id="toggleFormButton" class="btn-primary" type="button">+ Agregar</button>
+            </div>
+
+            <section id="recipeFormPanel" class="panel hidden">
+                <h3>Nueva receta</h3>
+                <form id="recipeForm">
+                    <div class="panel-grid">
+                        <div class="form-group">
+                            <label for="recipeName">Nombre de receta</label>
+                            <input id="recipeName" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipeCategory">Categoría</label>
+                            <select id="recipeCategory" required>
+                                <option value="Panadería">Panadería</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Bar/Cócteles">Bar/Cócteles</option>
+                                <option value="Café/Barismo">Café/Barismo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeSupplies">Insumos (uno por línea, formato: ingrediente,cantidad,unidad)</label>
+                        <textarea id="recipeSupplies" rows="5" required placeholder="Harina 000,1,kg&#10;Leche,0.6,litro"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeCost">Costo unitario</label>
+                        <input id="recipeCost" type="number" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit">Guardar receta</button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receta</th>
+                            <th>Categoría</th>
+                            <th>Insumos</th>
+                            <th>Costo/U</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recipesTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const recipes = [
+            {
+                name: 'Pan Francés',
+                category: 'Panadería',
+                cost: 821,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '1', unit: 'kg' },
+                    { ingredient: 'Levadura', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Sal', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.6', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Torta de Chocolate',
+                category: 'Panadería',
+                cost: 1510,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '0.3', unit: 'kg' },
+                    { ingredient: 'Azúcar', quantity: '0.25', unit: 'kg' },
+                    { ingredient: 'Chocolate', quantity: '0.2', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '4', unit: 'unidad' },
+                    { ingredient: 'Manteca', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Vainilla', quantity: '5', unit: 'ml' }
+                ]
+            },
+            {
+                name: 'Mojito',
+                category: 'Bar/Cócteles',
+                cost: 1579.85,
+                supplies: [
+                    { ingredient: 'Ron Blanco', quantity: '0.05', unit: 'litro' },
+                    { ingredient: 'Limón', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Menta Fresca', quantity: '0.5', unit: 'atado' },
+                    { ingredient: 'Azúcar', quantity: '0.01', unit: 'kg' },
+                    { ingredient: 'Agua Mineral', quantity: '0.15', unit: 'litro' }
+                ]
+            }
+        ];
+
+        const recipesTableBody = document.getElementById('recipesTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const recipeFormPanel = document.getElementById('recipeFormPanel');
+        const toggleFormButton = document.getElementById('toggleFormButton');
+        const recipeForm = document.getElementById('recipeForm');
+
+        function getStatusBySupplies(suppliesCount) {
+            if (suppliesCount >= 5) {
+                return { key: 'disponible', label: 'DISPONIBLE', cls: 'status status-ok' };
+            }
+            if (suppliesCount >= 3) {
+                return { key: 'bajo', label: 'BÁSICA', cls: 'status status-low' };
+            }
+            return { key: 'agotado', label: 'SIMPLE', cls: 'status status-empty' };
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(value);
+        }
+
+        function parseSupplies(rawText) {
+            return rawText
+                .split('\n')
+                .map((line) => line.trim())
+                .filter((line) => line)
+                .map((line) => {
+                    const parts = line.split(',').map((part) => part.trim());
+                    return {
+                        ingredient: parts[0],
+                        quantity: parts[1],
+                        unit: parts[2]
+                    };
+                })
+                .filter((item) => item.ingredient && item.quantity && item.unit);
+        }
+
+        function renderCategoryFilter() {
+            const categories = [...new Set(recipes.map((item) => item.category))];
+            categoryFilter.innerHTML = '<option value="">Todas las categorías</option>';
+            categories.forEach((category) => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function renderStats() {
+            const total = recipes.length;
+            const categories = new Set(recipes.map((item) => item.category)).size;
+            const completas = recipes.filter((item) => item.supplies.length >= 5).length;
+            const basicas = recipes.filter((item) => item.supplies.length >= 3 && item.supplies.length < 5).length;
+            const avgCost = total > 0
+                ? recipes.reduce((acc, item) => acc + item.cost, 0) / total
+                : 0;
+
+            document.getElementById('kpiTotal').textContent = total;
+            document.getElementById('kpiCategorias').textContent = categories;
+            document.getElementById('kpiCompletas').textContent = completas;
+            document.getElementById('kpiBasicas').textContent = basicas;
+            document.getElementById('kpiCosto').textContent = formatCurrency(avgCost);
+        }
+
+        function renderTable() {
+            const search = searchInput.value.trim().toLowerCase();
+            const category = categoryFilter.value;
+            const status = statusFilter.value;
+
+            const filtered = recipes.filter((recipe) => {
+                const statusData = getStatusBySupplies(recipe.supplies.length);
+                const searchable = `${recipe.name} ${recipe.category} ${recipe.supplies.map((item) => item.ingredient).join(' ')}`.toLowerCase();
+                const matchesSearch = !search || searchable.includes(search);
+                const matchesCategory = !category || recipe.category === category;
+                const matchesStatus = !status || statusData.key === status;
+                return matchesSearch && matchesCategory && matchesStatus;
+            });
+
+            recipesTableBody.innerHTML = '';
+
+            filtered.forEach((recipe, index) => {
+                const statusData = getStatusBySupplies(recipe.supplies.length);
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>
+                        <strong>${recipe.name}</strong>
+                        <div class="muted">${recipe.supplies[0].ingredient}</div>
+                    </td>
+                    <td><span class="tag">${recipe.category}</span></td>
+                    <td>
+                        <strong>${recipe.supplies.length}</strong>
+                        <span class="muted"> insumos</span>
+                    </td>
+                    <td class="cost">${formatCurrency(recipe.cost)}</td>
+                    <td><span class="${statusData.cls}">${statusData.label}</span></td>
+                    <td>
+                        <div class="actions">
+                            <button class="icon-btn" type="button" data-action="view" data-index="${index}">👁</button>
+                            <button class="icon-btn delete" type="button" data-action="delete" data-index="${index}">🗑</button>
+                        </div>
+                    </td>
+                `;
+
+                recipesTableBody.appendChild(row);
+            });
+        }
+
+        function renderAll() {
+            renderCategoryFilter();
+            renderStats();
+            renderTable();
+        }
+
+        toggleFormButton.addEventListener('click', () => {
+            recipeFormPanel.classList.toggle('hidden');
+        });
+
+        searchInput.addEventListener('input', renderTable);
+        categoryFilter.addEventListener('change', renderTable);
+        statusFilter.addEventListener('change', renderTable);
+
+        recipeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('recipeName').value.trim();
+            const category = document.getElementById('recipeCategory').value;
+            const cost = Number(document.getElementById('recipeCost').value);
+            const supplies = parseSupplies(document.getElementById('recipeSupplies').value);
+
+            if (!name || !category || !cost || supplies.length === 0) {
+                alert('Completa todos los campos para guardar la receta.');
+                return;
+            }
+
+            recipes.push({ name, category, cost, supplies });
+            recipeForm.reset();
+            recipeFormPanel.classList.add('hidden');
+            renderAll();
+        });
+
+        recipesTableBody.addEventListener('click', (event) => {
+            const button = event.target.closest('button');
+            if (!button) {
+                return;
+            }
+
+            const action = button.dataset.action;
+            const index = Number(button.dataset.index);
+            const recipe = recipes[index];
+
+            if (!recipe) {
+                return;
+            }
+
+            if (action === 'view') {
+                const detail = recipe.supplies
+                    .map((item) => `- ${item.ingredient}: ${item.quantity} ${item.unit}`)
+                    .join('\n');
+                alert(`Receta: ${recipe.name}\nCategoría: ${recipe.category}\nCosto: ${formatCurrency(recipe.cost)}\n\nComposición:\n${detail}`);
+            }
+
+            if (action === 'delete') {
+                recipes.splice(index, 1);
+                renderAll();
+            }
+        });
+
+        renderAll();
+    </script>
+</body>
+</html>

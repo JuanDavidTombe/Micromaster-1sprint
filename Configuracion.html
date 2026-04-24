@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>MicroMaster - Configuración</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="dashboard-container">
+		<aside class="sidebar">
+			<div>
+				<div class="sidebar-header">
+					<div class="logo-box">MICRO<br>MASTER</div>
+				</div>
+				<p class="sidebar-title">MÓDULOS</p>
+				<nav class="menu">
+					<ul>
+						<li><a href="Recetas.html">Recetas</a></li>
+						<li><a href="Configuracion.html" class="active">Configuración</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="sidebar-footer">
+				<p class="footer-brand">MicroMaster</p>
+				<p class="footer-version">Insumos Alimentarios v1.0</p>
+			</div>
+		</aside>
+
+		<main class="main-content">
+			<div class="page-top">
+				<h1 class="page-title">CONFIGURACIÓN</h1>
+				<span class="date-badge">23 de abr de 2026</span>
+			</div>
+
+			<section class="stats-grid">
+				<article class="kpi-card">
+					<p class="kpi-label">Usuarios</p>
+					<p id="kpiUsers" class="kpi-value">0</p>
+					<p class="kpi-note">registrados</p>
+				</article>
+				<article class="kpi-card">
+					<p class="kpi-label">Administradores</p>
+					<p id="kpiAdmins" class="kpi-value value-green">0</p>
+					<p class="kpi-note">con acceso total</p>
+				</article>
+				<article class="kpi-card">
+					<p class="kpi-label">Supervisores</p>
+					<p id="kpiSup" class="kpi-value value-yellow">0</p>
+					<p class="kpi-note">control operativo</p>
+				</article>
+				<article class="kpi-card">
+					<p class="kpi-label">Operadores</p>
+					<p id="kpiOps" class="kpi-value">0</p>
+					<p class="kpi-note">en producción</p>
+				</article>
+				<article class="kpi-card">
+					<p class="kpi-label">Alertas activas</p>
+					<p id="kpiAlerts" class="kpi-value value-red">0</p>
+					<p class="kpi-note">reglas cargadas</p>
+				</article>
+			</section>
+
+			<section class="panel">
+				<h3>Gestión de Usuarios</h3>
+				<form id="userForm">
+					<div class="panel-grid">
+						<div class="form-group">
+							<label for="userName">Nombre</label>
+							<input id="userName" type="text" required>
+						</div>
+						<div class="form-group">
+							<label for="userRole">Rol</label>
+							<select id="userRole" required>
+								<option value="Administrador">Administrador</option>
+								<option value="Supervisor">Supervisor</option>
+								<option value="Operador">Operador</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button class="btn-primary" type="submit">Guardar Usuario</button>
+					</div>
+				</form>
+			</section>
+
+			<div class="table-wrap mb-12">
+				<table>
+					<thead>
+						<tr>
+							<th>Usuario</th>
+							<th>Rol</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id="usersTableBody"></tbody>
+				</table>
+			</div>
+
+			<section class="panel">
+				<h3>Configuración de Alertas</h3>
+				<form id="alertsForm">
+					<div class="panel-grid">
+						<div class="form-group">
+							<label for="minStock">Stock mínimo</label>
+							<input id="minStock" type="number" min="0" step="1" required>
+						</div>
+						<div class="form-group">
+							<label for="expiryDays">Días antes de vencimiento</label>
+							<input id="expiryDays" type="number" min="0" step="1" required>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button class="btn-primary" type="submit">Guardar Alerta</button>
+					</div>
+				</form>
+			</section>
+
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Stock mínimo</th>
+							<th>Días vencimiento</th>
+							<th>Estado</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody id="alertsTableBody"></tbody>
+				</table>
+			</div>
+		</main>
+	</div>
+
+	<script>
+		const users = [
+			{ name: 'Carlos Rodríguez', role: 'Administrador' },
+			{ name: 'Marta Suárez', role: 'Supervisor' },
+			{ name: 'Juan Paredes', role: 'Operador' }
+		];
+
+		const alerts = [
+			{ minStock: 10, expiryDays: 3 },
+			{ minStock: 20, expiryDays: 7 }
+		];
+
+		const userForm = document.getElementById('userForm');
+		const alertsForm = document.getElementById('alertsForm');
+		const usersTableBody = document.getElementById('usersTableBody');
+		const alertsTableBody = document.getElementById('alertsTableBody');
+
+		function getRoleStatus(role) {
+			if (role === 'Administrador') {
+				return '<span class="status status-ok">ACTIVO</span>';
+			}
+			if (role === 'Supervisor') {
+				return '<span class="status status-low">REVISIÓN</span>';
+			}
+			return '<span class="status status-ok">ACTIVO</span>';
+		}
+
+		function renderKpis() {
+			const admins = users.filter((user) => user.role === 'Administrador').length;
+			const supervisors = users.filter((user) => user.role === 'Supervisor').length;
+			const operators = users.filter((user) => user.role === 'Operador').length;
+
+			document.getElementById('kpiUsers').textContent = users.length;
+			document.getElementById('kpiAdmins').textContent = admins;
+			document.getElementById('kpiSup').textContent = supervisors;
+			document.getElementById('kpiOps').textContent = operators;
+			document.getElementById('kpiAlerts').textContent = alerts.length;
+		}
+
+		function renderUsers() {
+			usersTableBody.innerHTML = '';
+			users.forEach((user, index) => {
+				const row = document.createElement('tr');
+				row.innerHTML = `
+					<td><strong>${user.name}</strong></td>
+					<td><span class="tag">${user.role}</span></td>
+					<td>${getRoleStatus(user.role)}</td>
+					<td>
+						<div class="actions">
+							<button class="icon-btn" type="button" data-type="user-view" data-index="${index}">👁</button>
+							<button class="icon-btn delete" type="button" data-type="user-delete" data-index="${index}">🗑</button>
+						</div>
+					</td>
+				`;
+				usersTableBody.appendChild(row);
+			});
+		}
+
+		function renderAlerts() {
+			alertsTableBody.innerHTML = '';
+			alerts.forEach((alertItem, index) => {
+				const row = document.createElement('tr');
+				row.innerHTML = `
+					<td><strong>${alertItem.minStock}</strong></td>
+					<td>${alertItem.expiryDays} días</td>
+					<td><span class="status status-low">MONITOREO</span></td>
+					<td>
+						<div class="actions">
+							<button class="icon-btn" type="button" data-type="alert-view" data-index="${index}">👁</button>
+							<button class="icon-btn delete" type="button" data-type="alert-delete" data-index="${index}">🗑</button>
+						</div>
+					</td>
+				`;
+				alertsTableBody.appendChild(row);
+			});
+		}
+
+		function renderAll() {
+			renderKpis();
+			renderUsers();
+			renderAlerts();
+		}
+
+		userForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const userName = document.getElementById('userName').value.trim();
+			const userRole = document.getElementById('userRole').value;
+
+			if (!userName) {
+				return;
+			}
+
+			users.push({ name: userName, role: userRole });
+			alert(`Usuario creado correctamente: ${userName} (${userRole})`);
+			userForm.reset();
+			renderAll();
+		});
+
+		alertsForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const minStock = Number(document.getElementById('minStock').value);
+			const expiryDays = Number(document.getElementById('expiryDays').value);
+
+			if (Number.isNaN(minStock) || Number.isNaN(expiryDays)) {
+				return;
+			}
+
+			alerts.push({ minStock, expiryDays });
+			alert(`Alerta guardada: stock mínimo ${minStock}, vencimiento ${expiryDays} días antes.`);
+			alertsForm.reset();
+			renderAll();
+		});
+
+		document.body.addEventListener('click', (event) => {
+			const button = event.target.closest('button[data-type]');
+			if (!button) {
+				return;
+			}
+
+			const type = button.dataset.type;
+			const index = Number(button.dataset.index);
+
+			if (type === 'user-view' && users[index]) {
+				alert(`Usuario: ${users[index].name}\nRol: ${users[index].role}`);
+			}
+
+			if (type === 'user-delete' && users[index]) {
+				users.splice(index, 1);
+				renderAll();
+			}
+
+			if (type === 'alert-view' && alerts[index]) {
+				alert(`Stock mínimo: ${alerts[index].minStock}\nDías antes de vencimiento: ${alerts[index].expiryDays}`);
+			}
+
+			if (type === 'alert-delete' && alerts[index]) {
+				alerts.splice(index, 1);
+				renderAll();
+			}
+		});
+
+		renderAll();
+	</script>
+</body>
+</html>
