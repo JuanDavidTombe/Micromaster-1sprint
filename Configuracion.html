@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>MicroMaster - Configuracion</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="dashboard-container">
+		<aside class="sidebar">
+			<div>
+				<div class="sidebar-header">
+					<div class="logo-box">MICRO<br>MASTER</div>
+				</div>
+				<p class="sidebar-title">MÓDULOS</p>
+				<nav class="menu">
+					<ul>
+						<li><a href="Recetas.html">Recetas</a></li>
+						<li><a href="Configuracion.html" class="active">Configuración</a></li>
+					</ul>
+				</nav>
+			</div>
+			<div class="sidebar-footer">
+				<p class="footer-brand">MicroMaster</p>
+				<p class="footer-version">Insumos Alimentarios v1.0</p>
+			</div>
+		</aside>
+
+		<main class="main-content">
+			<div class="page-header">
+				<div>
+					<h1 class="page-title">Gestión y Configuración</h1>
+					<p class="page-subtitle">Administra usuarios, roles, permisos y reglas de alertas del sistema</p>
+				</div>
+			</div>
+
+			<section class="stats-grid-2col">
+				<article class="kpi-card-2col">
+					<div class="kpi-header">
+						<p class="kpi-label">Usuarios</p>
+						<span class="kpi-icon">👤</span>
+					</div>
+					<p id="kpiUsers" class="kpi-value-large">0</p>
+					<p class="kpi-note">registrados en sistema</p>
+				</article>
+				<article class="kpi-card-2col">
+					<div class="kpi-header">
+						<p class="kpi-label">Alertas</p>
+						<span class="kpi-icon">⚠️</span>
+					</div>
+					<p id="kpiAlerts" class="kpi-value-large">0</p>
+					<p class="kpi-note">reglas activas</p>
+				</article>
+			</section>
+
+			<div class="toolbar-recipes">
+				<h3 class="toolbar-title">Gestión de Usuarios</h3>
+				<button id="toggleUserFormButton" class="btn-new-product" type="button">+ Nuevo Usuario</button>
+			</div>
+
+			<section id="userFormPanel" class="panel hidden">
+				<h3>Nuevo Usuario</h3>
+				<form id="userForm">
+					<div class="panel-grid">
+						<div class="form-group">
+							<label for="userName">Nombre</label>
+							<input id="userName" type="text" required>
+						</div>
+						<div class="form-group">
+							<label for="userRole">Rol</label>
+							<select id="userRole" required>
+								<option value="Administrador">Administrador</option>
+								<option value="Supervisor">Supervisor</option>
+								<option value="Operador">Operador</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button class="btn-primary" type="submit">Guardar Usuario</button>
+					</div>
+				</form>
+			</section>
+
+			<div class="filters-pills">
+				<button class="filter-btn active" data-role="">Todos</button>
+				<button class="filter-btn" data-role="Administrador">Administrador</button>
+				<button class="filter-btn" data-role="Supervisor">Supervisor</button>
+				<button class="filter-btn" data-role="Operador">Operador</button>
+			</div>
+
+			<div class="recipes-grid" id="usersGrid"></div>
+
+			<div class="toolbar-recipes" style="margin-top: 40px;">
+				<h3 class="toolbar-title">Configuración de Alertas</h3>
+				<button id="toggleAlertFormButton" class="btn-new-product" type="button">+ Nueva Alerta</button>
+			</div>
+
+			<section id="alertFormPanel" class="panel hidden">
+				<h3>Nueva Alerta</h3>
+				<form id="alertsForm">
+					<div class="panel-grid">
+						<div class="form-group">
+							<label for="minStock">Stock mínimo</label>
+							<input id="minStock" type="number" min="0" step="1" required>
+						</div>
+						<div class="form-group">
+							<label for="expiryDays">Días antes de vencimiento</label>
+							<input id="expiryDays" type="number" min="0" step="1" required>
+						</div>
+					</div>
+					<div class="form-actions">
+						<button class="btn-primary" type="submit">Guardar Alerta</button>
+					</div>
+				</form>
+			</section>
+
+			<div class="recipes-grid" id="alertsGrid"></div>
+		</main>
+	</div>
+
+	<script>
+		const users = [
+			{ name: 'Carlos Rodríguez', role: 'Administrador' },
+			{ name: 'Marta Suárez', role: 'Supervisor' },
+			{ name: 'Juan Paredes', role: 'Operador' },
+			{ name: 'Ana Martínez', role: 'Administrador' },
+			{ name: 'Pedro García', role: 'Supervisor' }
+		];
+
+		const alerts = [
+			{ minStock: 10, expiryDays: 3 },
+			{ minStock: 20, expiryDays: 7 },
+			{ minStock: 15, expiryDays: 5 }
+		];
+
+		const userForm = document.getElementById('userForm');
+		const alertsForm = document.getElementById('alertsForm');
+		const usersGrid = document.getElementById('usersGrid');
+		const alertsGrid = document.getElementById('alertsGrid');
+		const toggleUserFormButton = document.getElementById('toggleUserFormButton');
+		const toggleAlertFormButton = document.getElementById('toggleAlertFormButton');
+		const userFormPanel = document.getElementById('userFormPanel');
+		const alertFormPanel = document.getElementById('alertFormPanel');
+		const filterBtns = document.querySelectorAll('.filter-btn');
+
+		let currentRole = '';
+
+		function getRoleColor(role) {
+			if (role === 'Administrador') {
+				return '#2d7f39';
+			}
+			if (role === 'Supervisor') {
+				return '#b18100';
+			}
+			return '#111827';
+		}
+
+		function renderKpis() {
+			document.getElementById('kpiUsers').textContent = users.length;
+			document.getElementById('kpiAlerts').textContent = alerts.length;
+		}
+
+		function renderUsersGrid() {
+			const filtered = users.filter(user => !currentRole || user.role === currentRole);
+			
+			usersGrid.innerHTML = '';
+
+			filtered.forEach((user) => {
+				const card = document.createElement('div');
+				card.className = 'recipe-card';
+				
+				card.innerHTML = `
+					<h4 class="recipe-name">${user.name}</h4>
+					<p class="recipe-supplies" style="color: ${getRoleColor(user.role)}">${user.role}</p>
+					<div class="recipe-divider"></div>
+					<div class="recipe-composition">
+						<p class="composition-title">Información de Rol:</p>
+						<div class="supplies-list">
+							<div class="supply-item">
+								<span class="supply-name">Tipo de Usuario</span>
+								<span class="supply-value">${user.role}</span>
+							</div>
+							<div class="supply-item">
+								<span class="supply-name">Estado</span>
+								<span class="supply-value">Activo</span>
+							</div>
+						</div>
+					</div>
+					<div style="display: flex; gap: 8px; margin-top: 12px;">
+						<button class="icon-btn" type="button" data-action="delete-user" data-name="${user.name}" style="flex: 1; border-color: #e6c2bc; color: #c44f3f;">🗑 Eliminar</button>
+					</div>
+				`;
+
+				usersGrid.appendChild(card);
+			});
+		}
+
+		function renderAlertsGrid() {
+			alertsGrid.innerHTML = '';
+
+			alerts.forEach((alert, index) => {
+				const card = document.createElement('div');
+				card.className = 'recipe-card';
+				
+				card.innerHTML = `
+					<h4 class="recipe-name">Alerta ${index + 1}</h4>
+					<p class="recipe-supplies">Regla de Monitoreo</p>
+					<div class="recipe-divider"></div>
+					<div class="recipe-composition">
+						<p class="composition-title">Configuración:</p>
+						<div class="supplies-list">
+							<div class="supply-item">
+								<span class="supply-name">Stock mínimo</span>
+								<span class="supply-value">${alert.minStock} unidades</span>
+							</div>
+							<div class="supply-item">
+								<span class="supply-name">Vencimiento</span>
+								<span class="supply-value">${alert.expiryDays} días antes</span>
+							</div>
+						</div>
+					</div>
+					<div style="display: flex; gap: 8px; margin-top: 12px;">
+						<button class="icon-btn" type="button" data-action="delete-alert" data-index="${index}" style="flex: 1; border-color: #e6c2bc; color: #c44f3f;">🗑 Eliminar</button>
+					</div>
+				`;
+
+				alertsGrid.appendChild(card);
+			});
+		}
+
+		function renderAll() {
+			renderKpis();
+			renderUsersGrid();
+			renderAlertsGrid();
+		}
+
+		toggleUserFormButton.addEventListener('click', () => {
+			userFormPanel.classList.toggle('hidden');
+		});
+
+		toggleAlertFormButton.addEventListener('click', () => {
+			alertFormPanel.classList.toggle('hidden');
+		});
+
+		filterBtns.forEach(btn => {
+			btn.addEventListener('click', () => {
+				filterBtns.forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
+				currentRole = btn.dataset.role;
+				renderUsersGrid();
+			});
+		});
+
+		userForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const userName = document.getElementById('userName').value.trim();
+			const userRole = document.getElementById('userRole').value;
+
+			if (!userName) {
+				return;
+			}
+
+			users.push({ name: userName, role: userRole });
+			userForm.reset();
+			userFormPanel.classList.add('hidden');
+			renderAll();
+		});
+
+		alertsForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const minStock = Number(document.getElementById('minStock').value);
+			const expiryDays = Number(document.getElementById('expiryDays').value);
+
+			if (Number.isNaN(minStock) || Number.isNaN(expiryDays)) {
+				return;
+			}
+
+			alerts.push({ minStock, expiryDays });
+			alertsForm.reset();
+			alertFormPanel.classList.add('hidden');
+			renderAll();
+		});
+
+		document.body.addEventListener('click', (event) => {
+			const button = event.target.closest('button[data-action]');
+			if (!button) {
+				return;
+			}
+
+			const action = button.dataset.action;
+
+			if (action === 'delete-user') {
+				const name = button.dataset.name;
+				const index = users.findIndex(u => u.name === name);
+				if (index !== -1) {
+					users.splice(index, 1);
+					renderAll();
+				}
+			}
+
+			if (action === 'delete-alert') {
+				const index = Number(button.dataset.index);
+				if (alerts[index]) {
+					alerts.splice(index, 1);
+					renderAll();
+				}
+			}
+		});
+
+		renderAll();
+	</script>
+</body>
+</html>

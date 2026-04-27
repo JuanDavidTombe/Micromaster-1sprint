@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicroMaster - Recetas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-header">
+                    <div class="logo-box">MICRO<br>MASTER</div>
+                </div>
+                <p class="sidebar-title">MÓDULOS</p>
+                <nav class="menu">
+                    <ul>
+                        <li><a href="Recetas.html" class="active">Recetas</a></li>
+                        <li><a href="Configuracion.html">Configuración</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <p class="footer-brand">MicroMaster</p>
+                <p class="footer-version">Insumos Alimentarios v1.0</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Recetas y Productos</h1>
+                    <p class="page-subtitle">Administra recetas de café, cócteles, platos, bebidas y panadería</p>
+                </div>
+            </div>
+
+            <section class="stats-grid-2col">
+                <article class="kpi-card-2col">
+                    <div class="kpi-header">
+                        <p class="kpi-label">Total de Productos</p>
+                        <span class="kpi-icon">📋</span>
+                    </div>
+                    <p id="kpiTotal" class="kpi-value-large">0</p>
+                    <p class="kpi-note">Productos registrados</p>
+                </article>
+                <article class="kpi-card-2col">
+                    <div class="kpi-header">
+                        <p class="kpi-label">Insumos Utilizados</p>
+                        <span class="kpi-icon">📋</span>
+                    </div>
+                    <p id="kpiInsumos" class="kpi-value-large">0</p>
+                    <p class="kpi-note">Insumos diferentes</p>
+                </article>
+            </section>
+
+            <div class="toolbar-recipes">
+                <h3 class="toolbar-title">Listado de Productos</h3>
+                <button id="toggleFormButton" class="btn-new-product" type="button">+ Nuevo Producto</button>
+            </div>
+
+            <div class="filters-pills">
+                <button class="filter-btn active" data-category="">Todos</button>
+                <button class="filter-btn" data-category="Panadería">Panadería</button>
+                <button class="filter-btn" data-category="Restaurante">Restaurante</button>
+                <button class="filter-btn" data-category="Bar/Cócteles">Bar/Cócteles</button>
+                <button class="filter-btn" data-category="Café/Barismo">Café/Barismo</button>
+            </div>
+
+            <section id="recipeFormPanel" class="panel hidden">
+                <h3>Nuevo Producto</h3>
+                <form id="recipeForm">
+                    <div class="panel-grid">
+                        <div class="form-group">
+                            <label for="recipeName">Nombre del producto</label>
+                            <input id="recipeName" type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipeCategory">Categoría</label>
+                            <select id="recipeCategory" required>
+                                <option value="Panadería">Panadería</option>
+                                <option value="Restaurante">Restaurante</option>
+                                <option value="Bar/Cócteles">Bar/Cócteles</option>
+                                <option value="Café/Barismo">Café/Barismo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeSupplies">Insumos (uno por línea, formato: ingrediente,cantidad,unidad)</label>
+                        <textarea id="recipeSupplies" rows="5" required placeholder="Harina 000,1,kg&#10;Leche,0.6,litro"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipeCost">Costo unitario</label>
+                        <input id="recipeCost" type="number" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit">Guardar producto</button>
+                    </div>
+                </form>
+            </section>
+
+            <div class="recipes-grid" id="recipesGrid"></div>
+        </main>
+    </div>
+
+    <script>
+        const recipes = [
+            {
+                name: 'Pan Francés',
+                category: 'Panadería',
+                cost: 821,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '1', unit: 'kg' },
+                    { ingredient: 'Levadura', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Sal', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.6', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Torta de Chocolate',
+                category: 'Panadería',
+                cost: 1510,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '0.3', unit: 'kg' },
+                    { ingredient: 'Azúcar', quantity: '0.25', unit: 'kg' },
+                    { ingredient: 'Chocolate', quantity: '0.2', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '4', unit: 'unidad' },
+                    { ingredient: 'Manteca', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Vainilla', quantity: '5', unit: 'ml' }
+                ]
+            },
+            {
+                name: 'Medialunas',
+                category: 'Panadería',
+                cost: 676.90,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '0.5', unit: 'kg' },
+                    { ingredient: 'Manteca', quantity: '0.25', unit: 'kg' },
+                    { ingredient: 'Azúcar', quantity: '0.08', unit: 'kg' },
+                    { ingredient: 'Levadura', quantity: '0.015', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.15', unit: 'litro' },
+                    { ingredient: 'Sal', quantity: '0.01', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Cheesecake',
+                category: 'Panadería',
+                cost: 1128.50,
+                supplies: [
+                    { ingredient: 'Crema de Leche', quantity: '0.5', unit: 'litro' },
+                    { ingredient: 'Azúcar', quantity: '0.2', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '3', unit: 'unidad' },
+                    { ingredient: 'Vainilla', quantity: '10', unit: 'ml' },
+                    { ingredient: 'Harina 000', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Manteca', quantity: '0.1', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Alfajores',
+                category: 'Panadería',
+                cost: 1007,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '0.3', unit: 'kg' },
+                    { ingredient: 'Azúcar', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Manteca', quantity: '0.1', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '2', unit: 'unidad' },
+                    { ingredient: 'Chocolate', quantity: '0.15', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Hamburguesa Completa',
+                category: 'Restaurante',
+                cost: 994.80,
+                supplies: [
+                    { ingredient: 'Pan de Hamburguesa', quantity: '1', unit: 'unidad' },
+                    { ingredient: 'Carne Molida', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Queso Mozzarella', quantity: '0.03', unit: 'kg' },
+                    { ingredient: 'Tomate', quantity: '0.05', unit: 'kg' },
+                    { ingredient: 'Lechuga', quantity: '0.5', unit: 'unidad' },
+                    { ingredient: 'Mayonesa', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Mostaza', quantity: '0.01', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Pizza Margherita',
+                category: 'Restaurante',
+                cost: 928.50,
+                supplies: [
+                    { ingredient: 'Harina 000', quantity: '0.25', unit: 'kg' },
+                    { ingredient: 'Queso Mozzarella', quantity: '0.15', unit: 'kg' },
+                    { ingredient: 'Tomate', quantity: '0.1', unit: 'kg' },
+                    { ingredient: 'Salsa de Tomate', quantity: '0.05', unit: 'kg' },
+                    { ingredient: 'Albahaca Fresca', quantity: '0.5', unit: 'atado' },
+                    { ingredient: 'Aceite de Oliva', quantity: '0.02', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Ensalada César',
+                category: 'Restaurante',
+                cost: 734.40,
+                supplies: [
+                    { ingredient: 'Lechuga', quantity: '1', unit: 'unidad' },
+                    { ingredient: 'Pechuga de Pollo', quantity: '0.1', unit: 'kg' },
+                    { ingredient: 'Queso Parmesano', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Mayonesa', quantity: '0.03', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '1', unit: 'unidad' },
+                    { ingredient: 'Aceite de Oliva', quantity: '0.01', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Pasta Carbonara',
+                category: 'Restaurante',
+                cost: 661,
+                supplies: [
+                    { ingredient: 'Pasta Spaghetti', quantity: '0.12', unit: 'kg' },
+                    { ingredient: 'Jamón Cocido', quantity: '0.08', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '2', unit: 'unidad' },
+                    { ingredient: 'Queso Parmesano', quantity: '0.03', unit: 'kg' },
+                    { ingredient: 'Crema de Leche', quantity: '0.05', unit: 'litro' },
+                    { ingredient: 'Aceite de Oliva', quantity: '0.01', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Salmón a la Plancha',
+                category: 'Restaurante',
+                cost: 1579.85,
+                supplies: [
+                    { ingredient: 'Salmón', quantity: '0.18', unit: 'kg' },
+                    { ingredient: 'Limón', quantity: '0.03', unit: 'kg' },
+                    { ingredient: 'Aceite de Oliva', quantity: '0.02', unit: 'litro' },
+                    { ingredient: 'Sal', quantity: '0.003', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Mojito',
+                category: 'Bar/Cócteles',
+                cost: 307.40,
+                supplies: [
+                    { ingredient: 'Ron Blanco', quantity: '0.05', unit: 'litro' },
+                    { ingredient: 'Limón', quantity: '0.02', unit: 'kg' },
+                    { ingredient: 'Menta Fresca', quantity: '0.5', unit: 'atado' },
+                    { ingredient: 'Azúcar', quantity: '0.01', unit: 'kg' },
+                    { ingredient: 'Agua Mineral', quantity: '0.15', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Margarita',
+                category: 'Bar/Cócteles',
+                cost: 231.70,
+                supplies: [
+                    { ingredient: 'Tequila', quantity: '0.05', unit: 'litro' },
+                    { ingredient: 'Triple Sec', quantity: '0.03', unit: 'litro' },
+                    { ingredient: 'Limón', quantity: '0.03', unit: 'kg' },
+                    { ingredient: 'Sal', quantity: '0.002', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Pisco Sour',
+                category: 'Bar/Cócteles',
+                cost: 221.40,
+                supplies: [
+                    { ingredient: 'Pisco', quantity: '0.06', unit: 'litro' },
+                    { ingredient: 'Limón', quantity: '0.04', unit: 'kg' },
+                    { ingredient: 'Azúcar', quantity: '0.015', unit: 'kg' },
+                    { ingredient: 'Huevos', quantity: '0.5', unit: 'unidad' }
+                ]
+            },
+            {
+                name: 'Cerveza con Limón',
+                category: 'Bar/Cócteles',
+                cost: 292.10,
+                supplies: [
+                    { ingredient: 'Cerveza Rubia', quantity: '0.33', unit: 'litro' },
+                    { ingredient: 'Limón', quantity: '0.02', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Espresso',
+                category: 'Café/Barismo',
+                cost: 31.50,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Café con Leche',
+                category: 'Café/Barismo',
+                cost: 113.30,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.15', unit: 'litro' },
+                    { ingredient: 'Azúcar', quantity: '0.01', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Latte de Vainilla',
+                category: 'Café/Barismo',
+                cost: 161.10,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.18', unit: 'litro' },
+                    { ingredient: 'Sirope de Vainilla', quantity: '0.03', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Cappuccino con Leche de Almendras',
+                category: 'Café/Barismo',
+                cost: 137,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' },
+                    { ingredient: 'Leche de Almendras', quantity: '0.12', unit: 'litro' },
+                    { ingredient: 'Canela en Polvo', quantity: '0.001', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Mocha',
+                category: 'Café/Barismo',
+                cost: 196.40,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.15', unit: 'litro' },
+                    { ingredient: 'Sirope de Chocolate', quantity: '0.03', unit: 'litro' },
+                    { ingredient: 'Crema Batida', quantity: '0.03', unit: 'litro' },
+                    { ingredient: 'Cacao en Polvo', quantity: '0.002', unit: 'kg' }
+                ]
+            },
+            {
+                name: 'Caramel Macchiato',
+                category: 'Café/Barismo',
+                cost: 190.10,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.007', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.18', unit: 'litro' },
+                    { ingredient: 'Sirope de Caramelo', quantity: '0.03', unit: 'litro' },
+                    { ingredient: 'Crema Batida', quantity: '0.02', unit: 'litro' }
+                ]
+            },
+            {
+                name: 'Flat White',
+                category: 'Café/Barismo',
+                cost: 141,
+                supplies: [
+                    { ingredient: 'Café en Grano Espresso', quantity: '0.014', unit: 'kg' },
+                    { ingredient: 'Leche', quantity: '0.15', unit: 'litro' }
+                ]
+            }
+        ];
+
+        const recipesGrid = document.getElementById('recipesGrid');
+        const toggleFormButton = document.getElementById('toggleFormButton');
+        const recipeFormPanel = document.getElementById('recipeFormPanel');
+        const recipeForm = document.getElementById('recipeForm');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        let currentCategory = '';
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(value);
+        }
+
+        function parseSupplies(rawText) {
+            return rawText
+                .split('\n')
+                .map((line) => line.trim())
+                .filter((line) => line)
+                .map((line) => {
+                    const parts = line.split(',').map((part) => part.trim());
+                    return {
+                        ingredient: parts[0],
+                        quantity: parts[1],
+                        unit: parts[2]
+                    };
+                })
+                .filter((item) => item.ingredient && item.quantity && item.unit);
+        }
+
+        function countUniqueIngredients() {
+            const ingredients = new Set();
+            recipes.forEach(recipe => {
+                recipe.supplies.forEach(supply => {
+                    ingredients.add(supply.ingredient);
+                });
+            });
+            return ingredients.size;
+        }
+
+        function renderStats() {
+            document.getElementById('kpiTotal').textContent = recipes.length;
+            document.getElementById('kpiInsumos').textContent = countUniqueIngredients();
+        }
+
+        function renderGrid() {
+            const filtered = recipes.filter(recipe => !currentCategory || recipe.category === currentCategory);
+            
+            recipesGrid.innerHTML = '';
+
+            filtered.forEach((recipe) => {
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                
+                const supplyItems = recipe.supplies.map(supply => `
+                    <div class="supply-item">
+                        <span class="supply-name">${supply.ingredient}</span>
+                        <span class="supply-value">${supply.quantity} ${supply.unit}</span>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <h4 class="recipe-name">${recipe.name}</h4>
+                    <p class="recipe-supplies">${recipe.supplies.length} insumos</p>
+                    <div class="recipe-divider"></div>
+                    <div class="recipe-composition">
+                        <p class="composition-title">Composición:</p>
+                        <div class="supplies-list">
+                            ${supplyItems}
+                        </div>
+                    </div>
+                    <div class="recipe-cost">
+                        <span class="cost-label">Costo unitario:</span>
+                        <span class="cost-value">${formatCurrency(recipe.cost)}</span>
+                    </div>
+                `;
+
+                recipesGrid.appendChild(card);
+            });
+        }
+
+        function renderAll() {
+            renderStats();
+            renderGrid();
+        }
+
+        // Event listeners
+        toggleFormButton.addEventListener('click', () => {
+            recipeFormPanel.classList.toggle('hidden');
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                renderGrid();
+            });
+        });
+
+        recipeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('recipeName').value.trim();
+            const category = document.getElementById('recipeCategory').value;
+            const cost = Number(document.getElementById('recipeCost').value);
+            const supplies = parseSupplies(document.getElementById('recipeSupplies').value);
+
+            if (!name || !category || !cost || supplies.length === 0) {
+                alert('Completa todos los campos para guardar el producto.');
+                return;
+            }
+
+            recipes.push({ name, category, cost, supplies });
+            recipeForm.reset();
+            recipeFormPanel.classList.add('hidden');
+            renderAll();
+        });
+
+        // Initial render
+        renderAll();
+    </script>
+</body>
+</html>
