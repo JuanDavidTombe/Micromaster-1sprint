@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroMaster — Reportes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div id="app" class="visible">
+
+  <aside class="sidebar">
+    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
+    <div class="sidebar-logo">
+      <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
+      <div>
+        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-sub">Gestión de Insumos</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Principal</div>
+    <a class="nav-item" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a class="nav-item" href="inventario.html">
+      <span class="nav-icon">📦</span><span>Inventario</span>
+    </a>
+    <a class="nav-item" href="recetas.html">
+      <span class="nav-icon">📋</span><span>Recetas</span>
+    </a>
+    <a class="nav-item" href="envios.html">
+      <span class="nav-icon">🚚</span><span>Envíos</span>
+    </a>
+
+    <div class="sidebar-section-label">Herramientas</div>
+    <a class="nav-item" href="calculadora.html">
+      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    </a>
+    <a class="nav-item" href="simulador.html">
+      <span class="nav-icon">📈</span><span>Simulador</span>
+    </a>
+    <a class="nav-item active" href="reportes.html">
+      <span class="nav-icon">📊</span><span>Reportes</span>
+    </a>
+    <a class="nav-item" href="configuracion.html">
+      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    </a>
+    <a class="nav-item" href="acerca.html">
+      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    </a>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Admin Principal</div>
+      <div class="sidebar-user-role">Administrador</div>
+      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Reportes</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="page active" id="page-reportes">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchReportTab('metricas', this)">📊 Métricas</button>
+          <button class="tab-btn" onclick="switchReportTab('trazabilidad', this)">📋 Trazabilidad</button>
+          <button class="tab-btn" onclick="switchReportTab('documentos', this)">📄 Documentos</button>
+          <button class="tab-btn" onclick="switchReportTab('descargas', this)">💾 Descargas</button>
+        </div>
+
+        <!-- MÉTRICAS -->
+        <div id="rtab-metricas">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon">💰</div>
+              <div class="kpi-value">$846</div>
+              <div class="kpi-label">Valor Inventario</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon">📋</div>
+              <div class="kpi-value">$2.95</div>
+              <div class="kpi-label">Costo Prom. Receta</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon">⚠️</div>
+              <div class="kpi-value" style="color:var(--amber)">2</div>
+              <div class="kpi-label">Alertas Activas</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon">🍽️</div>
+              <div class="kpi-value" style="color:var(--teal)">4</div>
+              <div class="kpi-label">Recetas Activas</div>
+            </div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-card">
+              <div class="chart-title">Valor de Inventario por Categoría</div>
+              <div class="chart-sub">Distribución del valor total de insumos</div>
+              <div class="chart-wrap"><canvas id="chartCategoria"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-title">Estado del Stock</div>
+              <div class="chart-sub">Disponible / Bajo stock / Agotado</div>
+              <div class="chart-wrap"><canvas id="chartStock"></canvas></div>
+            </div>
+            <div class="chart-card wide">
+              <div class="chart-title">Evolución de Costos de Producción</div>
+              <div class="chart-sub">Últimos 6 meses — tendencia de costos</div>
+              <div class="chart-wrap" style="height:180px"><canvas id="chartEvolucion"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRAZABILIDAD -->
+        <div id="rtab-trazabilidad" style="display:none">
+          <div class="toolbar">
+            <div class="search-box">
+              <span>🔍</span>
+              <input type="text" placeholder="Buscar en historial...">
+            </div>
+            <select class="filter-select">
+              <option>Todas las acciones</option>
+              <option>Crear insumo</option>
+              <option>Editar receta</option>
+              <option>Crear envío</option>
+              <option>Cambiar estado</option>
+            </select>
+            <button class="btn btn-outline" onclick="demo()">📥 Exportar CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Fecha</th><th>Usuario</th><th>Acción</th><th>Detalle</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-16 10:30</td>
+                  <td><span class="badge badge-blue">admin</span></td>
+                  <td><span class="badge badge-amber">Cambiar estado envío</span></td>
+                  <td>ENV-002: Pendiente → En tránsito</td>
+                </tr>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-16 09:00</td>
+                  <td><span class="badge badge-blue">admin</span></td>
+                  <td><span class="badge badge-green">Crear envío</span></td>
+                  <td>ENV-001 a Restaurante El Sabor ($245.00)</td>
+                </tr>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-15 15:20</td>
+                  <td><span class="badge badge-gray">operador</span></td>
+                  <td><span class="badge badge-amber">Editar receta</span></td>
+                  <td>Pan Francés — modificó cantidad de harina</td>
+                </tr>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-15 14:30</td>
+                  <td><span class="badge badge-blue">admin</span></td>
+                  <td><span class="badge badge-green">Crear insumo</span></td>
+                  <td>Leche entera (85L, $1.20/L)</td>
+                </tr>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-14 11:15</td>
+                  <td><span class="badge badge-gray">supervisor</span></td>
+                  <td><span class="badge badge-green">Crear receta</span></td>
+                  <td>Torta de Chocolate — 5 insumos, $6.20/u</td>
+                </tr>
+                <tr>
+                  <td style="font-family:DM Mono,monospace;font-size:11px">2024-01-13 09:45</td>
+                  <td><span class="badge badge-blue">admin</span></td>
+                  <td><span class="badge badge-red">Eliminar insumo</span></td>
+                  <td>Levadura (5kg) — fuera de catálogo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DOCUMENTOS -->
+        <div id="rtab-documentos" style="display:none">
+          <div class="upload-area" onclick="demo()">
+            <div class="upload-icon">📁</div>
+            <div class="upload-title">Arrastra archivos aquí o haz clic para subir</div>
+            <div class="upload-sub">Formatos: Excel (.xlsx, .xls), Word (.doc, .docx), PDF — Máx. 10MB</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>Nombre</th><th>Tipo</th><th>Tamaño</th><th>Subido</th><th>Acciones</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td>📊 <strong>Inventario_Enero_2024.xlsx</strong></td>
+                  <td><span class="badge badge-green">Excel</span></td>
+                  <td style="font-size:12px">248 KB</td>
+                  <td style="font-size:12px">2024-01-15 14:22</td>
+                  <td><div class="actions">
+                    <button class="btn btn-xs btn-outline" onclick="demo()">👁️ Ver</button>
+                    <button class="btn btn-xs btn-primary" onclick="demo()">⬇️ Descargar</button>
+                    <button class="btn-icon danger" onclick="demo()">🗑️</button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td>📄 <strong>Reporte_Q4_2023.pdf</strong></td>
+                  <td><span class="badge badge-red">PDF</span></td>
+                  <td style="font-size:12px">1.2 MB</td>
+                  <td style="font-size:12px">2024-01-10 09:30</td>
+                  <td><div class="actions">
+                    <button class="btn btn-xs btn-outline" onclick="demo()">👁️ Ver</button>
+                    <button class="btn btn-xs btn-primary" onclick="demo()">⬇️ Descargar</button>
+                    <button class="btn-icon danger" onclick="demo()">🗑️</button>
+                  </div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DESCARGAS -->
+        <div id="rtab-descargas" style="display:none">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+            <div class="calc-panel">
+              <h3>📦 Inventario Actual</h3>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Exportar lista completa de insumos con stock y precios</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+              </div>
+            </div>
+            <div class="calc-panel">
+              <h3>📋 Lista de Recetas</h3>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Recetas activas con costos e insumos detallados</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+              </div>
+            </div>
+            <div class="calc-panel">
+              <h3>🚚 Historial de Envíos</h3>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Todos los envíos con estados y montos</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+              </div>
+            </div>
+            <div class="calc-panel">
+              <h3>🔍 Trazabilidad / Auditoría</h3>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Historial completo de cambios del sistema</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+              </div>
+            </div>
+            <div class="calc-panel">
+              <h3>📊 Resumen de Métricas</h3>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">KPIs y gráficos del sistema en un reporte ejecutivo</p>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-primary btn-sm" onclick="demo()">📄 Descargar PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Modal Inventario -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Insumo</div>
+      <button class="modal-close" onclick="closeModal('modal-inv')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" placeholder="Nombre del insumo"></div>
+      <div class="field"><label>Categoría</label><select><option>Lácteos</option><option>Cereales</option><option>Proteínas</option><option>Vegetales</option><option>Bebidas</option><option>Condimentos</option><option>Grasas</option></select></div>
+      <div class="field"><label>Cantidad</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Unidad</label><select><option>kg</option><option>L</option><option>g</option><option>ml</option><option>u</option></select></div>
+      <div class="field"><label>Stock Mínimo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Stock Máximo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Precio/Unidad</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Vencimiento</label><input type="date"></div>
+      <div class="field span2"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recetas -->
+<div class="modal-overlay" id="modal-rec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Receta</div>
+      <button class="modal-close" onclick="closeModal('modal-rec')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Nombre de la Receta</label><input type="text" placeholder="Ej: Pan de queso"></div>
+      <div class="field"><label>Categoría</label><select><option>Panadería</option><option>Repostería</option><option>Bebidas</option><option>Platos</option></select></div>
+      <div class="field"><label>Costo Estimado</label><input type="number" placeholder="0.00"></div>
+      <div class="field span2"><label>Insumos (separados por coma)</label><input type="text" placeholder="Harina 1kg, Sal 20g, Leche 0.6L"></div>
+      <div class="field span2"><label>Descripción</label><textarea placeholder="Descripción del proceso de preparación..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rec')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Envíos -->
+<div class="modal-overlay" id="modal-env">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Envío</div>
+      <button class="modal-close" onclick="closeModal('modal-env')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Destino</label><input type="text" placeholder="Nombre del cliente / establecimiento"></div>
+      <div class="field"><label>Fecha Envío</label><input type="date"></div>
+      <div class="field"><label>Estado Inicial</label><select><option>Pendiente</option><option>En tránsito</option></select></div>
+      <div class="field span2"><label>Insumos a enviar</label><textarea placeholder="Ej: Leche 20L, Aceite 10L, Harina 5kg"></textarea></div>
+      <div class="field"><label>Total Estimado ($)</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Observaciones</label><input type="text" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-env')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Crear Envío</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+
+<script src="datos/datos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

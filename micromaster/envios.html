@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroMaster — Envíos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+
+</head>
+<body>
+
+<div id="app" class="visible">
+
+  <aside class="sidebar">
+    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
+    <div class="sidebar-logo">
+      <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
+      <div>
+        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-sub">Gestión de Insumos</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Principal</div>
+    <a class="nav-item" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a class="nav-item" href="inventario.html">
+      <span class="nav-icon">📦</span><span>Inventario</span>
+    </a>
+    <a class="nav-item" href="recetas.html">
+      <span class="nav-icon">📋</span><span>Recetas</span>
+    </a>
+    <a class="nav-item active" href="envios.html">
+      <span class="nav-icon">🚚</span><span>Envíos</span>
+    </a>
+
+    <div class="sidebar-section-label">Herramientas</div>
+    <a class="nav-item" href="calculadora.html">
+      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    </a>
+    <a class="nav-item" href="simulador.html">
+      <span class="nav-icon">📈</span><span>Simulador</span>
+    </a>
+    <a class="nav-item" href="reportes.html">
+      <span class="nav-icon">📊</span><span>Reportes</span>
+    </a>
+    <a class="nav-item" href="configuracion.html">
+      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    </a>
+    <a class="nav-item" href="acerca.html">
+      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    </a>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Admin Principal</div>
+      <div class="sidebar-user-role">Administrador</div>
+      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Envíos</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="page active" id="page-envios">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Total Envíos</div>
+            <div class="stat-value">3</div>
+            <div class="stat-sub">este mes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pendientes</div>
+            <div class="stat-value amber">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">En Tránsito</div>
+            <div class="stat-value blue">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Entregados</div>
+            <div class="stat-value green">1</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Buscar envío...">
+          </div>
+          <select class="filter-select">
+            <option>Todos los estados</option>
+            <option>Pendiente</option>
+            <option>En tránsito</option>
+            <option>Entregado</option>
+          </select>
+          <button class="btn btn-primary" onclick="openModal('modal-env')">+ Nuevo Envío</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>ID</th><th>Destino</th><th>Fecha</th><th>Progreso</th><th>Estado</th><th>Total</th><th>Acciones</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">ENV-001</span></td>
+                <td><strong>Restaurante El Sabor</strong></td>
+                <td style="font-size:12px">2024-01-16</td>
+                <td>
+                  <div class="env-progress">
+                    <div class="p-step done"><div class="p-dot"></div></div>
+                    <div class="p-line done"></div>
+                    <div class="p-step done"><div class="p-dot"></div></div>
+                    <div class="p-line done"></div>
+                    <div class="p-step done"><div class="p-dot"></div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-green">Entregado</span></td>
+                <td style="font-family:DM Mono,monospace;font-weight:700">$245.00</td>
+                <td><div class="actions">
+                  <button class="btn-icon" onclick="demo()">👁️</button>
+                  <button class="btn-icon" onclick="demo()">→</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">ENV-002</span></td>
+                <td><strong>Hotel Casa Grande</strong></td>
+                <td style="font-size:12px">2024-01-20</td>
+                <td>
+                  <div class="env-progress">
+                    <div class="p-step done"><div class="p-dot"></div></div>
+                    <div class="p-line done"></div>
+                    <div class="p-step active"><div class="p-dot"></div></div>
+                    <div class="p-line"></div>
+                    <div class="p-step"><div class="p-dot"></div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-blue">En Tránsito</span></td>
+                <td style="font-family:DM Mono,monospace;font-weight:700">$380.50</td>
+                <td><div class="actions">
+                  <button class="btn-icon" onclick="demo()">👁️</button>
+                  <button class="btn-icon" onclick="demo()">→</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">ENV-003</span></td>
+                <td><strong>Cafetería Central</strong></td>
+                <td style="font-size:12px">2024-01-22</td>
+                <td>
+                  <div class="env-progress">
+                    <div class="p-step active"><div class="p-dot"></div></div>
+                    <div class="p-line"></div>
+                    <div class="p-step"><div class="p-dot"></div></div>
+                    <div class="p-line"></div>
+                    <div class="p-step"><div class="p-dot"></div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-amber">Pendiente</span></td>
+                <td style="font-family:DM Mono,monospace;font-weight:700">$128.75</td>
+                <td><div class="actions">
+                  <button class="btn-icon" onclick="demo()">👁️</button>
+                  <button class="btn-icon" onclick="demo()">→</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Modal Inventario -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Insumo</div>
+      <button class="modal-close" onclick="closeModal('modal-inv')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" placeholder="Nombre del insumo"></div>
+      <div class="field"><label>Categoría</label><select><option>Lácteos</option><option>Cereales</option><option>Proteínas</option><option>Vegetales</option><option>Bebidas</option><option>Condimentos</option><option>Grasas</option></select></div>
+      <div class="field"><label>Cantidad</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Unidad</label><select><option>kg</option><option>L</option><option>g</option><option>ml</option><option>u</option></select></div>
+      <div class="field"><label>Stock Mínimo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Stock Máximo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Precio/Unidad</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Vencimiento</label><input type="date"></div>
+      <div class="field span2"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recetas -->
+<div class="modal-overlay" id="modal-rec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Receta</div>
+      <button class="modal-close" onclick="closeModal('modal-rec')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Nombre de la Receta</label><input type="text" placeholder="Ej: Pan de queso"></div>
+      <div class="field"><label>Categoría</label><select><option>Panadería</option><option>Repostería</option><option>Bebidas</option><option>Platos</option></select></div>
+      <div class="field"><label>Costo Estimado</label><input type="number" placeholder="0.00"></div>
+      <div class="field span2"><label>Insumos (separados por coma)</label><input type="text" placeholder="Harina 1kg, Sal 20g, Leche 0.6L"></div>
+      <div class="field span2"><label>Descripción</label><textarea placeholder="Descripción del proceso de preparación..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rec')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Envíos -->
+<div class="modal-overlay" id="modal-env">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Envío</div>
+      <button class="modal-close" onclick="closeModal('modal-env')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Destino</label><input type="text" placeholder="Nombre del cliente / establecimiento"></div>
+      <div class="field"><label>Fecha Envío</label><input type="date"></div>
+      <div class="field"><label>Estado Inicial</label><select><option>Pendiente</option><option>En tránsito</option></select></div>
+      <div class="field span2"><label>Insumos a enviar</label><textarea placeholder="Ej: Leche 20L, Aceite 10L, Harina 5kg"></textarea></div>
+      <div class="field"><label>Total Estimado ($)</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Observaciones</label><input type="text" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-env')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Crear Envío</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+
+<script src="datos/datos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

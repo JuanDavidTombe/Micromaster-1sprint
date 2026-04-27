@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroMaster — Configuración</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+
+</head>
+<body>
+
+<div id="app" class="visible">
+
+  <aside class="sidebar">
+    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
+    <div class="sidebar-logo">
+      <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
+      <div>
+        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-sub">Gestión de Insumos</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Principal</div>
+    <a class="nav-item" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a class="nav-item" href="inventario.html">
+      <span class="nav-icon">📦</span><span>Inventario</span>
+    </a>
+    <a class="nav-item" href="recetas.html">
+      <span class="nav-icon">📋</span><span>Recetas</span>
+    </a>
+    <a class="nav-item" href="envios.html">
+      <span class="nav-icon">🚚</span><span>Envíos</span>
+    </a>
+
+    <div class="sidebar-section-label">Herramientas</div>
+    <a class="nav-item" href="calculadora.html">
+      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    </a>
+    <a class="nav-item" href="simulador.html">
+      <span class="nav-icon">📈</span><span>Simulador</span>
+    </a>
+    <a class="nav-item" href="reportes.html">
+      <span class="nav-icon">📊</span><span>Reportes</span>
+    </a>
+    <a class="nav-item active" href="configuracion.html">
+      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    </a>
+    <a class="nav-item" href="acerca.html">
+      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    </a>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Admin Principal</div>
+      <div class="sidebar-user-role">Administrador</div>
+      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Configuración</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="page active" id="page-configuracion">
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Usuarios</div>
+            <div class="stat-value">3</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Administradores</div>
+            <div class="stat-value green">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Supervisores</div>
+            <div class="stat-value blue">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Operadores</div>
+            <div class="stat-value amber">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Alertas</div>
+            <div class="stat-value red">2</div>
+          </div>
+        </div>
+
+        <div class="config-grid">
+          <div>
+            <div class="section-divider"><h3>Gestión de Usuarios</h3></div>
+            <div class="config-panel" style="margin-bottom:16px">
+              <h3>Agregar Usuario</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Nombre</label>
+                  <input type="text" placeholder="Nombre completo">
+                </div>
+                <div class="field">
+                  <label>Rol</label>
+                  <select>
+                    <option>Administrador</option>
+                    <option>Supervisor</option>
+                    <option>Operador</option>
+                  </select>
+                </div>
+                <div class="field span2">
+                  <label>Correo</label>
+                  <input type="email" placeholder="usuario@micromaster.com">
+                </div>
+              </div>
+              <div style="margin-top:14px;text-align:right">
+                <button class="btn btn-primary" onclick="demo()">Guardar Usuario</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Carlos Rodríguez</strong><br><span style="font-size:11px;color:var(--text-muted)">admin@micromaster.com</span></td>
+                    <td><span class="badge badge-blue">Administrador</span></td>
+                    <td><span class="badge badge-green">Activo</span></td>
+                    <td><div class="actions"><button class="btn-icon" onclick="demo()">✏️</button><button class="btn-icon danger" onclick="demo()">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Marta Suárez</strong><br><span style="font-size:11px;color:var(--text-muted)">marta@micromaster.com</span></td>
+                    <td><span class="badge badge-amber">Supervisor</span></td>
+                    <td><span class="badge badge-green">Activo</span></td>
+                    <td><div class="actions"><button class="btn-icon" onclick="demo()">✏️</button><button class="btn-icon danger" onclick="demo()">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Juan Paredes</strong><br><span style="font-size:11px;color:var(--text-muted)">juan@micromaster.com</span></td>
+                    <td><span class="badge badge-gray">Operador</span></td>
+                    <td><span class="badge badge-green">Activo</span></td>
+                    <td><div class="actions"><button class="btn-icon" onclick="demo()">✏️</button><button class="btn-icon danger" onclick="demo()">🗑️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-divider"><h3>Configuración de Alertas</h3></div>
+            <div class="config-panel" style="margin-bottom:16px">
+              <h3>Nueva Alerta</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label>Stock Mínimo Global</label>
+                  <input type="number" placeholder="10" value="10">
+                </div>
+                <div class="field">
+                  <label>Días Antes Vencimiento</label>
+                  <input type="number" placeholder="15" value="15">
+                </div>
+              </div>
+              <div style="margin-top:14px;text-align:right">
+                <button class="btn btn-primary" onclick="demo()">Guardar Alerta</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Stock Mín.</th><th>Días Venc.</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td><strong>10</strong> unidades</td>
+                    <td>3 días</td>
+                    <td><span class="badge badge-amber">Monitoreo</span></td>
+                    <td><div class="actions"><button class="btn-icon" onclick="demo()">✏️</button><button class="btn-icon danger" onclick="demo()">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>20</strong> unidades</td>
+                    <td>7 días</td>
+                    <td><span class="badge badge-amber">Monitoreo</span></td>
+                    <td><div class="actions"><button class="btn-icon" onclick="demo()">✏️</button><button class="btn-icon danger" onclick="demo()">🗑️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Modal Inventario -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Insumo</div>
+      <button class="modal-close" onclick="closeModal('modal-inv')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" placeholder="Nombre del insumo"></div>
+      <div class="field"><label>Categoría</label><select><option>Lácteos</option><option>Cereales</option><option>Proteínas</option><option>Vegetales</option><option>Bebidas</option><option>Condimentos</option><option>Grasas</option></select></div>
+      <div class="field"><label>Cantidad</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Unidad</label><select><option>kg</option><option>L</option><option>g</option><option>ml</option><option>u</option></select></div>
+      <div class="field"><label>Stock Mínimo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Stock Máximo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Precio/Unidad</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Vencimiento</label><input type="date"></div>
+      <div class="field span2"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recetas -->
+<div class="modal-overlay" id="modal-rec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Receta</div>
+      <button class="modal-close" onclick="closeModal('modal-rec')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Nombre de la Receta</label><input type="text" placeholder="Ej: Pan de queso"></div>
+      <div class="field"><label>Categoría</label><select><option>Panadería</option><option>Repostería</option><option>Bebidas</option><option>Platos</option></select></div>
+      <div class="field"><label>Costo Estimado</label><input type="number" placeholder="0.00"></div>
+      <div class="field span2"><label>Insumos (separados por coma)</label><input type="text" placeholder="Harina 1kg, Sal 20g, Leche 0.6L"></div>
+      <div class="field span2"><label>Descripción</label><textarea placeholder="Descripción del proceso de preparación..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rec')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Envíos -->
+<div class="modal-overlay" id="modal-env">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Envío</div>
+      <button class="modal-close" onclick="closeModal('modal-env')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Destino</label><input type="text" placeholder="Nombre del cliente / establecimiento"></div>
+      <div class="field"><label>Fecha Envío</label><input type="date"></div>
+      <div class="field"><label>Estado Inicial</label><select><option>Pendiente</option><option>En tránsito</option></select></div>
+      <div class="field span2"><label>Insumos a enviar</label><textarea placeholder="Ej: Leche 20L, Aceite 10L, Harina 5kg"></textarea></div>
+      <div class="field"><label>Total Estimado ($)</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Observaciones</label><input type="text" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-env')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Crear Envío</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+
+<script src="datos/datos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

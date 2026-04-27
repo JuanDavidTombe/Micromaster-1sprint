@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroMaster — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+
+</head>
+<body>
+
+<div id="app" class="visible">
+
+  <aside class="sidebar">
+    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
+    <div class="sidebar-logo">
+      <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
+      <div>
+        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-sub">Gestión de Insumos</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Principal</div>
+    <a class="nav-item active" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Inicio</span>
+    </a>
+    <a class="nav-item" href="inventario.html">
+      <span class="nav-icon">📦</span><span>Inventario</span>
+    </a>
+    <a class="nav-item" href="recetas.html">
+      <span class="nav-icon">📋</span><span>Recetas</span>
+    </a>
+    <a class="nav-item" href="envios.html">
+      <span class="nav-icon">🚚</span><span>Envíos</span>
+    </a>
+
+    <div class="sidebar-section-label">Herramientas</div>
+    <a class="nav-item" href="calculadora.html">
+      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    </a>
+    <a class="nav-item" href="simulador.html">
+      <span class="nav-icon">📈</span><span>Simulador</span>
+    </a>
+    <a class="nav-item" href="reportes.html">
+      <span class="nav-icon">📊</span><span>Reportes</span>
+    </a>
+    <a class="nav-item" href="configuracion.html">
+      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    </a>
+    <a class="nav-item" href="acerca.html">
+      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    </a>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Admin Principal</div>
+      <div class="sidebar-user-role">Administrador</div>
+      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Inicio</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="page active" id="page-dashboard">
+
+        <!-- KPIs operacionales enfocados en producción alimentaria -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">En Producción Hoy</div>
+            <div class="stat-value blue">3</div>
+            <div class="stat-sub">lotes activos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Planificados</div>
+            <div class="stat-value green">5</div>
+            <div class="stat-sub">órdenes de producción</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Insumos Críticos</div>
+            <div class="stat-value red">2</div>
+            <div class="stat-sub">bajo stock mínimo</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Por Vencer</div>
+            <div class="stat-value amber">3</div>
+            <div class="stat-sub">en los próximos 15 días</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Valor Inventario</div>
+            <div class="stat-value green">$846</div>
+            <div class="stat-sub">valorización actual</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Despachos Pend.</div>
+            <div class="stat-value">1</div>
+            <div class="stat-sub">pendiente de salida</div>
+          </div>
+        </div>
+
+        <!-- Producciones en proceso -->
+        <div class="section-divider"><h3>🏭 Producciones en Proceso</h3></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:24px">
+          <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div>
+                <div style="font-weight:800;font-size:15px;color:var(--black)">Pan Francés — Lote #47</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Panadería · Inicio: 06:00 AM</div>
+              </div>
+              <span class="badge badge-blue">En proceso</span>
+            </div>
+            <div style="background:var(--bg);border-radius:8px;overflow:hidden;height:8px;margin-bottom:8px">
+              <div style="height:100%;width:65%;background:var(--primary);border-radius:8px;transition:width 0.5s"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+              <span>Progreso: 65%</span>
+              <span>Finaliza: ~10:30 AM</span>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bg);font-size:12px;color:var(--text-muted)">
+              Insumos: Harina 12 kg · Sal 200 g · Leche 7 L · Levadura 240 g
+            </div>
+          </div>
+
+          <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div>
+                <div style="font-weight:800;font-size:15px;color:var(--black)">Torta Chocolate — Lote #48</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Repostería · Inicio: 08:30 AM</div>
+              </div>
+              <span class="badge badge-blue">En proceso</span>
+            </div>
+            <div style="background:var(--bg);border-radius:8px;overflow:hidden;height:8px;margin-bottom:8px">
+              <div style="height:100%;width:30%;background:var(--primary);border-radius:8px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+              <span>Progreso: 30%</span>
+              <span>Finaliza: ~12:00 PM</span>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bg);font-size:12px;color:var(--text-muted)">
+              Insumos: Harina 3 kg · Chocolate 2 kg · Huevos 40 u · Azúcar 2.5 kg
+            </div>
+          </div>
+
+          <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div>
+                <div style="font-weight:800;font-size:15px;color:var(--black)">Café Americano — Lote #49</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">Bebidas · Inicio: 09:00 AM</div>
+              </div>
+              <span class="badge badge-green">Completado</span>
+            </div>
+            <div style="background:var(--bg);border-radius:8px;overflow:hidden;height:8px;margin-bottom:8px">
+              <div style="height:100%;width:100%;background:var(--teal);border-radius:8px"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted)">
+              <span>Progreso: 100% ✅</span>
+              <span>Listo para despacho</span>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bg);font-size:12px;color:var(--text-muted)">
+              Insumos: Café molido 1.5 kg · Agua purificada 25 L
+            </div>
+          </div>
+        </div>
+
+        <!-- Planificación de producción -->
+        <div class="section-divider"><h3>📅 Planificación — Próximos lotes</h3></div>
+        <div class="table-wrap" style="margin-bottom:24px">
+          <table>
+            <thead><tr>
+              <th>Orden</th><th>Producto</th><th>Categoría</th><th>Cantidad</th><th>Insumos necesarios</th><th>Fecha planificada</th><th>Estado</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">#OP-050</span></td>
+                <td><strong>Mojito Clásico</strong></td>
+                <td><span class="badge badge-green">Bebidas</span></td>
+                <td>200 u</td>
+                <td style="font-size:12px;color:var(--text-muted)">Ron 10L · Limón 4kg · Menta 2kg</td>
+                <td style="font-size:12px">Hoy 14:00</td>
+                <td><span class="badge badge-amber">Planificado</span></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">#OP-051</span></td>
+                <td><strong>Pan Integral</strong></td>
+                <td><span class="badge badge-amber">Panadería</span></td>
+                <td>150 u</td>
+                <td style="font-size:12px;color:var(--text-muted)">Harina integral 15kg · Avena 3kg</td>
+                <td style="font-size:12px">Mañana 06:00</td>
+                <td><span class="badge badge-amber">Planificado</span></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">#OP-052</span></td>
+                <td><strong>Pollo Asado</strong></td>
+                <td><span class="badge badge-red">Proteínas</span></td>
+                <td>80 u</td>
+                <td style="font-size:12px;color:var(--text-muted)">Pollo 40kg · Aceite 3L · Especias</td>
+                <td style="font-size:12px">25 Abr 11:00</td>
+                <td><span class="badge badge-red">⚠️ Insumo crítico</span></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">#OP-053</span></td>
+                <td><strong>Jugo de Naranja Natural</strong></td>
+                <td><span class="badge badge-blue">Bebidas</span></td>
+                <td>500 u</td>
+                <td style="font-size:12px;color:var(--text-muted)">Jugo naranja 30L · Agua 20L</td>
+                <td style="font-size:12px">26 Abr 08:00</td>
+                <td><span class="badge badge-gray">Pendiente aprobación</span></td>
+              </tr>
+              <tr>
+                <td><span style="font-family:DM Mono,monospace;font-weight:700">#OP-054</span></td>
+                <td><strong>Ensalada de Zanahoria</strong></td>
+                <td><span class="badge badge-green">Vegetales</span></td>
+                <td>120 u</td>
+                <td style="font-size:12px;color:var(--text-muted)">Zanahoria 20kg · Aceite 1L · Sal 500g</td>
+                <td style="font-size:12px">26 Abr 10:00</td>
+                <td><span class="badge badge-amber">Planificado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Alertas de stock crítico -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+          <div style="background:var(--white);border:1.5px solid #f5cccc;border-radius:14px;padding:20px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+              <span style="font-size:18px">🚨</span>
+              <h3 style="font-family:Fraunces,serif;font-size:16px;font-weight:900;color:var(--red)">Insumos Críticos</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fdf5f5;border-radius:8px">
+                <div>
+                  <p style="font-weight:700;font-size:13px">Pollo entero</p>
+                  <p style="font-size:11px;color:var(--red)">Stock: 0 kg — AGOTADO</p>
+                </div>
+                <button class="btn btn-sm" style="background:var(--red);color:#fff;border-color:var(--red)" onclick="demo()">Reabastecer</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fdf5f5;border-radius:8px">
+                <div>
+                  <p style="font-weight:700;font-size:13px">Harina de trigo</p>
+                  <p style="font-size:11px;color:var(--amber)">Stock: 12 kg — Mínimo: 15 kg</p>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="demo()">Reabastecer</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--white);border:1.5px solid #f5e8cc;border-radius:14px;padding:20px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+              <span style="font-size:18px">⏰</span>
+              <h3 style="font-family:Fraunces,serif;font-size:16px;font-weight:900;color:var(--amber)">Próximos a Vencer</h3>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fdf9f0;border-radius:8px">
+                <div>
+                  <p style="font-weight:700;font-size:13px">Pollo entero</p>
+                  <p style="font-size:11px;color:var(--red)">Vence: 2025-05-20 — ¡6 días!</p>
+                </div>
+                <span class="badge badge-red">Urgente</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fdf9f0;border-radius:8px">
+                <div>
+                  <p style="font-weight:700;font-size:13px">Zanahoria</p>
+                  <p style="font-size:11px;color:var(--amber)">Vence: 2025-05-30 — 16 días</p>
+                </div>
+                <span class="badge badge-amber">Atención</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fdf9f0;border-radius:8px">
+                <div>
+                  <p style="font-weight:700;font-size:13px">Jugo de naranja</p>
+                  <p style="font-size:11px;color:var(--amber)">Vence: 2025-06-05 — 42 días</p>
+                </div>
+                <span class="badge badge-amber">Pronto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<!-- Modal Inventario -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Insumo</div>
+      <button class="modal-close" onclick="closeModal('modal-inv')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" placeholder="Nombre del insumo"></div>
+      <div class="field"><label>Categoría</label><select><option>Lácteos</option><option>Cereales</option><option>Proteínas</option><option>Vegetales</option><option>Bebidas</option><option>Condimentos</option><option>Grasas</option></select></div>
+      <div class="field"><label>Cantidad</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Unidad</label><select><option>kg</option><option>L</option><option>g</option><option>ml</option><option>u</option></select></div>
+      <div class="field"><label>Stock Mínimo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Stock Máximo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Precio/Unidad</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Vencimiento</label><input type="date"></div>
+      <div class="field span2"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recetas -->
+<div class="modal-overlay" id="modal-rec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Receta</div>
+      <button class="modal-close" onclick="closeModal('modal-rec')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Nombre de la Receta</label><input type="text" placeholder="Ej: Pan de queso"></div>
+      <div class="field"><label>Categoría</label><select><option>Panadería</option><option>Repostería</option><option>Bebidas</option><option>Platos</option></select></div>
+      <div class="field"><label>Costo Estimado</label><input type="number" placeholder="0.00"></div>
+      <div class="field span2"><label>Insumos (separados por coma)</label><input type="text" placeholder="Harina 1kg, Sal 20g, Leche 0.6L"></div>
+      <div class="field span2"><label>Descripción</label><textarea placeholder="Descripción del proceso de preparación..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rec')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Envíos -->
+<div class="modal-overlay" id="modal-env">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Envío</div>
+      <button class="modal-close" onclick="closeModal('modal-env')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Destino</label><input type="text" placeholder="Nombre del cliente / establecimiento"></div>
+      <div class="field"><label>Fecha Envío</label><input type="date"></div>
+      <div class="field"><label>Estado Inicial</label><select><option>Pendiente</option><option>En tránsito</option></select></div>
+      <div class="field span2"><label>Insumos a enviar</label><textarea placeholder="Ej: Leche 20L, Aceite 10L, Harina 5kg"></textarea></div>
+      <div class="field"><label>Total Estimado ($)</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Observaciones</label><input type="text" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-env')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Crear Envío</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+
+<script src="datos/datos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

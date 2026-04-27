@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MicroMaster — Acerca de</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+
+</head>
+<body>
+
+<div id="app" class="visible">
+
+  <aside class="sidebar">
+    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
+    <div class="sidebar-logo">
+      <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
+      <div>
+        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-sub">Gestión de Insumos</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Principal</div>
+    <a class="nav-item" href="dashboard.html">
+      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    </a>
+    <a class="nav-item" href="inventario.html">
+      <span class="nav-icon">📦</span><span>Inventario</span>
+    </a>
+    <a class="nav-item" href="recetas.html">
+      <span class="nav-icon">📋</span><span>Recetas</span>
+    </a>
+    <a class="nav-item" href="envios.html">
+      <span class="nav-icon">🚚</span><span>Envíos</span>
+    </a>
+
+    <div class="sidebar-section-label">Herramientas</div>
+    <a class="nav-item" href="calculadora.html">
+      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    </a>
+    <a class="nav-item" href="simulador.html">
+      <span class="nav-icon">📈</span><span>Simulador</span>
+    </a>
+    <a class="nav-item" href="reportes.html">
+      <span class="nav-icon">📊</span><span>Reportes</span>
+    </a>
+    <a class="nav-item" href="configuracion.html">
+      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    </a>
+    <a class="nav-item active" href="acerca.html">
+      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    </a>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Admin Principal</div>
+      <div class="sidebar-user-role">Administrador</div>
+      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="topbar-title">Acerca de</div>
+      <div class="topbar-right">
+        <div class="topbar-date" id="topbar-date"></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="page active" id="page-acerca">
+        <div class="section-divider"><h3>ℹ️ Acerca de MicroMaster</h3></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+
+          <!-- Info del programa -->
+          <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:24px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+              <div style="width:44px;height:44px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;font-family:Fraunces,serif;font-weight:900">M</div>
+              <div>
+                <p style="font-weight:900;font-size:16px;color:var(--black)">MicroMaster v2.0</p>
+                <p style="font-size:12px;color:var(--text-muted)">Sistema de Gestión de Insumos Alimentarios</p>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--bg)">
+                <span style="color:var(--text-muted);font-weight:600">Versión actual</span>
+                <span style="font-family:DM Mono,monospace;font-weight:700">2.0.1 — Abr 2026</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--bg)">
+                <span style="color:var(--text-muted);font-weight:600">Licencia</span>
+                <span style="font-weight:700">Plan Pro — Activo</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--bg)">
+                <span style="color:var(--text-muted);font-weight:600">Próxima actualización</span>
+                <span style="font-weight:700;color:var(--teal)">Mayo 2026 ✅</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0">
+                <span style="color:var(--text-muted);font-weight:600">Soporte técnico</span>
+                <span style="font-weight:700">Lun–Vie 8am–6pm</span>
+              </div>
+            </div>
+            <div style="background:var(--primary-light);border-radius:10px;padding:14px">
+              <p style="font-size:12px;font-weight:700;color:var(--primary);margin-bottom:4px">📧 Contáctanos</p>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">soporte@micromaster.co</p>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">ventas@micromaster.co</p>
+              <p style="font-size:12px;color:var(--text-muted)">info@micromaster.co</p>
+            </div>
+          </div>
+
+          <!-- Equipo de desarrollo + próximas actualizaciones -->
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px">
+              <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:12px">👨‍💻 Equipo de desarrollo</p>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#3a8fdf);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0">JT</div>
+                  <div>
+                    <p style="font-size:13px;font-weight:700">Juan David Tombe</p>
+                    <p style="font-size:11px;color:var(--text-muted)">Líder · Arquitecto de Software · juandtombe@micromaster.co</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#22a87e);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0">KM</div>
+                  <div>
+                    <p style="font-size:13px;font-weight:700">Kevin Jesús Millán</p>
+                    <p style="font-size:11px;color:var(--text-muted)">Programador Full Stack · kevinmillan@micromaster.co</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#e09a20);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0">DB</div>
+                  <div>
+                    <p style="font-size:13px;font-weight:700">Deiby Anderson Vitonco</p>
+                    <p style="font-size:11px;color:var(--text-muted)">Programador Backend · deibybitonco@micromaster.co</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3d4a6b,#5e718d);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0">MP</div>
+                  <div>
+                    <p style="font-size:13px;font-weight:700">María Camila Palechor</p>
+                    <p style="font-size:11px;color:var(--text-muted)">Frontend / UI·UX · mcamilapalechor@micromaster.co</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--primary-dark);border-radius:14px;padding:20px;color:#fff">
+              <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:rgba(255,255,255,0.5);margin-bottom:12px">🚀 Próximas actualizaciones</p>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <p style="font-size:13px">📱 App móvil (iOS / Android)</p>
+                  <span style="font-size:10px;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,0.6)">Mayo 2026</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <p style="font-size:13px">🤖 IA para predicción de compras</p>
+                  <span style="font-size:10px;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,0.6)">Jul 2026</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <p style="font-size:13px">🌐 Gestión multi-sucursal</p>
+                  <span style="font-size:10px;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,0.6)">Sep 2026</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <p style="font-size:13px">📦 Integración con proveedores ERP</p>
+                  <span style="font-size:10px;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;color:rgba(255,255,255,0.6)">Nov 2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Modal Inventario -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Agregar Insumo</div>
+      <button class="modal-close" onclick="closeModal('modal-inv')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" placeholder="Nombre del insumo"></div>
+      <div class="field"><label>Categoría</label><select><option>Lácteos</option><option>Cereales</option><option>Proteínas</option><option>Vegetales</option><option>Bebidas</option><option>Condimentos</option><option>Grasas</option></select></div>
+      <div class="field"><label>Cantidad</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Unidad</label><select><option>kg</option><option>L</option><option>g</option><option>ml</option><option>u</option></select></div>
+      <div class="field"><label>Stock Mínimo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Stock Máximo</label><input type="number" placeholder="0"></div>
+      <div class="field"><label>Precio/Unidad</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Vencimiento</label><input type="date"></div>
+      <div class="field span2"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Insumo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recetas -->
+<div class="modal-overlay" id="modal-rec">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Receta</div>
+      <button class="modal-close" onclick="closeModal('modal-rec')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Nombre de la Receta</label><input type="text" placeholder="Ej: Pan de queso"></div>
+      <div class="field"><label>Categoría</label><select><option>Panadería</option><option>Repostería</option><option>Bebidas</option><option>Platos</option></select></div>
+      <div class="field"><label>Costo Estimado</label><input type="number" placeholder="0.00"></div>
+      <div class="field span2"><label>Insumos (separados por coma)</label><input type="text" placeholder="Harina 1kg, Sal 20g, Leche 0.6L"></div>
+      <div class="field span2"><label>Descripción</label><textarea placeholder="Descripción del proceso de preparación..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-rec')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Guardar Receta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Envíos -->
+<div class="modal-overlay" id="modal-env">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Envío</div>
+      <button class="modal-close" onclick="closeModal('modal-env')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="field span2"><label>Destino</label><input type="text" placeholder="Nombre del cliente / establecimiento"></div>
+      <div class="field"><label>Fecha Envío</label><input type="date"></div>
+      <div class="field"><label>Estado Inicial</label><select><option>Pendiente</option><option>En tránsito</option></select></div>
+      <div class="field span2"><label>Insumos a enviar</label><textarea placeholder="Ej: Leche 20L, Aceite 10L, Harina 5kg"></textarea></div>
+      <div class="field"><label>Total Estimado ($)</label><input type="number" placeholder="0.00"></div>
+      <div class="field"><label>Observaciones</label><input type="text" placeholder="Notas adicionales"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-env')">Cancelar</button>
+      <button class="btn btn-primary" onclick="demoModal()">Crear Envío</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+
+<script src="datos/datos.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
