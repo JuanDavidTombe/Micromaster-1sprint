@@ -49,6 +49,7 @@ body {
   background: var(--bg);
   color: var(--black);
   min-height: 100vh;
+  overflow-y: scroll !important;
 }
 
 /* ── AUTH / LANDING ── */
@@ -254,20 +255,135 @@ body {
 .brand-strip {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .brand-strip-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.14);
+  border-radius: 999px;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   white-space: nowrap;
   font-family: 'DM Sans', sans-serif;
+}
+
+.brand-strip-item .icon-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.22);
+  font-size: 11px;
+}
+
+.icon-inline,
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icon-inline {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 12px;
+  background: rgba(15,110,86,0.08);
+  color: var(--primary);
+  font-size: 16px;
+}
+
+.icon-inline.small {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 10px;
+  background: rgba(15,110,86,0.10);
+  font-size: 13px;
+}
+
+.icon-inline.light {
+  background: rgba(255,255,255,0.14);
+  color: #fff;
+}
+
+.section-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  background: rgba(15,110,86,0.12);
+  color: var(--primary);
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.search-box span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.badge .icon-inline.small {
+  margin-right: 6px;
+  background: rgba(255,255,255,0.2);
+}
+
+.mega-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mega-menu-link .icon-inline {
+  background: rgba(15,110,86,0.08);
+  color: var(--primary);
+}
+
+.mega-menu-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mega-menu-feature .icon-inline {
+  background: rgba(255,255,255,0.14);
+  color: #fff;
+}
+
+.list-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.list-feature .icon-inline {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
 }
 
 /* ── FLOATING WELCOME CARD (like Square chatbot) ── */
@@ -276,27 +392,65 @@ body {
   bottom: 28px;
   right: 28px;
   z-index: 100;
-  width: 300px;
+  width: auto;
+  max-width: 340px;
   animation: floatIn 0.4s 0.6s ease both;
 }
 
 @keyframes floatIn {
-  from { opacity:0; transform: translateY(20px); }
+  from { opacity:0; transform: translateY(24px); }
   to   { opacity:1; transform: translateY(0); }
 }
 
 .welcome-card {
-  background: #111;
-  border-radius: 16px;
-  padding: 24px;
+  position: relative;
+  background: rgba(17,17,17,0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
+  padding: 24px 24px 20px;
   color: #fff;
-  box-shadow: 0 16px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 22px 60px rgba(0,0,0,0.28);
+}
+
+.welcome-card::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  right: 28px;
+  width: 24px;
+  height: 24px;
+  background: rgba(17,17,17,0.96);
+  transform: rotate(45deg);
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.16);
+}
+
+.welcome-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.welcome-close:hover {
+  background: rgba(255,255,255,0.18);
 }
 
 .welcome-card-logo {
-  width: 32px; height: 32px;
+  width: 34px; height: 34px;
   background: #fff;
-  border-radius: 6px;
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   font-size: 14px;
   font-weight: 900;
@@ -356,14 +510,141 @@ body {
   color: #fff;
 }
 
+.welcome-float-btn:hover {
+  transform: scale(1.05);
+  background: #111;
+}
+
+.welcome-float.minimized {
+  width: auto;
+  height: auto;
+  bottom: 28px;
+  right: 28px;
+}
+
+.welcome-float.minimized .welcome-card {
+  display: none;
+}
+
+.welcome-float.minimized .welcome-float-btn {
+  display: inline-flex;
+}
+
+.welcome-float,
+.welcome-float.under-mega {
+  transition: top 0.22s ease, right 0.22s ease, opacity 0.22s ease;
+}
+
+.welcome-float.under-mega {
+  position: fixed;
+  top: calc(60px + 300px);
+  right: 28px;
+  bottom: auto;
+  z-index: 60;
+}
+
+.welcome-float.under-mega {
+  position: fixed;
+  top: calc(60px + 280px);
+  right: 28px;
+  bottom: auto;
+  z-index: 60;
+  transition: top 0.2s ease;
+}
+
 /* ── DROPDOWN MENU (tipos de negocio style) ── */
 .mega-menu-overlay {
-  display: none;
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 120;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
-.mega-menu-overlay.open { display: block; }
+.mega-menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* When a mega menu is open, make the landing nav integrate visually */
+.landing-nav.mega-open {
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(12,18,28,0.06);
+  color: #111;
+}
+.landing-nav.mega-open .landing-nav-links a {
+  background: rgba(15,15,20,0.03);
+  border-radius: 999px;
+  padding: 8px 12px;
+  margin-right: 8px;
+  color: #1a1a2e;
+  border: 1px solid rgba(0,0,0,0.04);
+  text-decoration: none;
+  font-weight: 600;
+}
+.landing-nav.mega-open .landing-nav-links a:hover {
+  background: rgba(15,15,20,0.06);
+}
+
+/* ── UNIFIED MEGA MENU CONTAINER ── */
+.mega-menu-container {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  z-index: 120;
+  background: #fff;
+  padding: 40px 60px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-12px);
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.mega-menu-container.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mega-menu-panel {
+  display: none;
+}
+
+.mega-menu-panel.active {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+/* Hide old overlay system when new container is active */
+.landing-nav.mega-open .mega-menu-overlay {
+  display: none !important;
+}
+
+/* Logout button bubble (ensure visible over light nav) */
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-logout svg { filter: brightness(0) invert(1); }
+.btn-logout:hover { transform: translateY(-1px); }
 
 .mega-menu {
   position: absolute;
@@ -373,6 +654,13 @@ body {
   display: flex;
   gap: 60px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  transform: translateY(-12px);
+  opacity: 0;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.mega-menu-overlay.open .mega-menu {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .mega-menu-links {
@@ -445,6 +733,15 @@ body {
 .sidebar-logo:hover .sidebar-logo-img { transform: rotate(-6deg) scale(1.05); }
 
 .sidebar-logo-text {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.sidebar-logo-title {
   font-family: var(--font-display);
   font-size: 20px;
   font-weight: 700;
@@ -553,6 +850,11 @@ body {
   transition: all var(--t-base);
   position: relative;
   overflow: hidden;
+}
+
+.btn-logout span {
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-logout::before {
@@ -1182,7 +1484,56 @@ tbody tr:hover { background: #fafbfd; }
   padding: 20px;
 }
 
-.kpi-icon { font-size: 22px; margin-bottom: 10px; }
+.kpi-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--primary-dark);
+  background: rgba(15,110,86,0.08);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.icon-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: inherit;
+  background: rgba(255,255,255,0.12);
+  margin-right: 8px;
+}
+
+.icon-inline.small {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+}
+
+.icon-inline.light {
+  background: rgba(15,110,86,0.12);
+  color: var(--primary-dark);
+}
+
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  margin-right: 10px;
+  background: rgba(15,110,86,0.08);
+  color: var(--primary-dark);
+  font-size: 14px;
+}
 
 .kpi-value {
   font-family: 'Fraunces', serif;

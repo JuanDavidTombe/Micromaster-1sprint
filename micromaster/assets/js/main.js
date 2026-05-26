@@ -51,25 +51,220 @@ function switchAuthMode(mode) {
 
 function hideWelcome() {
   const el = document.getElementById('welcome-float');
-  if (el) el.style.display = 'none';
+  if (el) el.classList.add('minimized');
+}
+
+function restoreWelcome() {
+  const el = document.getElementById('welcome-float');
+  if (el) el.classList.remove('minimized');
 }
 
 function toggleMegaMenu(id, e) {
   if (e) e.preventDefault();
-  const menus = ['mega-tipos','mega-productos','mega-modulos','mega-precios','mega-novedades'];
-  const targetId = 'mega-' + id;
-  menus.forEach(m => {
-    const el = document.getElementById(m);
-    if (el && m !== targetId) el.classList.remove('open');
-  });
-  const target = document.getElementById(targetId);
-  if (target) target.classList.toggle('open');
+  
+  // Usa el nuevo sistema de contenedor unificado
+  const container = document.getElementById('mega-menu-container');
+  if (!container) return;
+  
+  // Oculta todos los panels
+  document.querySelectorAll('.mega-menu-panel').forEach(p => p.classList.remove('active'));
+  
+  // Muestra el panel activo
+  const panel = document.getElementById('panel-' + id);
+  if (panel) {
+    panel.classList.add('active');
+    container.classList.add('open');
+  }
+  
+  // Actualiza los estilos del nav
+  const nav = document.querySelector('.landing-nav');
+  if (nav) {
+    if (panel) nav.classList.add('mega-open');
+    else nav.classList.remove('mega-open');
+  }
+  
+  // Actualiza el welcome card
+  const welcome = document.getElementById('welcome-float');
+  if (welcome && panel) welcome.classList.add('under-mega');
 }
 
 function closeMegaMenu() {
-  ['mega-tipos','mega-productos','mega-modulos','mega-precios','mega-novedades']
-    .forEach(m => { const el = document.getElementById(m); if (el) el.classList.remove('open'); });
+  const container = document.getElementById('mega-menu-container');
+  if (container) container.classList.remove('open');
+  const nav = document.querySelector('.landing-nav');
+  if (nav) nav.classList.remove('mega-open');
+  const welcome = document.getElementById('welcome-float');
+  if (welcome) welcome.classList.remove('under-mega');
 }
+
+// ── UNIFIED MEGA MENU BEHAVIOR ──
+(function() {
+  // Solo ejecutar en página de inicio
+  if (!document.querySelector('.landing-nav')) return;
+  
+  const hoverDelay = 200;
+  let closeTimer = null;
+  let lastInteraction = 0;
+  const menuNames = ['tipos', 'productos', 'modulos', 'novedades'];
+
+  // Create unified container
+  const container = document.createElement('div');
+  container.className = 'mega-menu-container';
+  container.id = 'mega-menu-container';
+  const landingHero = document.querySelector('.landing-hero');
+  if (landingHero && landingHero.parentNode) {
+    landingHero.parentNode.insertBefore(container, landingHero);
+  } else {
+    document.body.appendChild(container);
+  }
+
+  // Create panels from existing overlays
+  menuNames.forEach(name => {
+    const overlay = document.getElementById('mega-' + name);
+    if (!overlay) return;
+    const megaMenu = overlay.querySelector('.mega-menu');
+    if (!megaMenu) return;
+
+    const panel = document.createElement('div');
+    panel.className = 'mega-menu-panel';
+    panel.id = 'panel-' + name;
+    panel.innerHTML = megaMenu.innerHTML;
+    container.appendChild(panel);
+  });
+
+  const openMenu = (name) => {
+    if (!name || !menuNames.includes(name)) return;
+    clearTimeout(closeTimer);
+    lastInteraction = Date.now();
+
+    // Show container
+    container.classList.add('open');
+
+    // Hide all panels, show active
+    document.querySelectorAll('.mega-menu-panel').forEach(p => p.classList.remove('active'));
+    const activePanel = document.getElementById('panel-' + name);
+    if (activePanel) activePanel.classList.add('active');
+
+    // Update nav styling
+    const nav = document.querySelector('.landing-nav');
+    if (nav) nav.classList.add('mega-open');
+
+    // Update welcome card
+    const welcome = document.getElementById('welcome-float');
+    if (welcome) welcome.classList.add('under-mega');
+  };
+
+  const scheduleClose = () => {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      if (Date.now() - lastInteraction >= hoverDelay) {
+        closeMegaMenu();
+      }
+    }, hoverDelay);
+  };
+
+  // Monitor nav and container for hover
+  const nav = document.querySelector('.landing-nav');
+  if (nav) {
+    nav.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+      lastInteraction = Date.now();
+    });
+    nav.addEventListener('mouseleave', () => {
+      lastInteraction = Date.now();
+      scheduleClose();
+    });
+  }
+
+  container.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    lastInteraction = Date.now();
+  });
+
+  container.addEventListener('mouseleave', () => {
+    lastInteraction = Date.now();
+    scheduleClose();
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const isNav = nav && nav.contains(e.target);
+    const isContainer = container.contains(e.target);
+    if (!isNav && !isContainer && container.classList.contains('open')) {
+      closeMegaMenu();
+    }
+  });
+
+  // Bind top nav links
+  document.querySelectorAll('.landing-nav-links a[data-menu]').forEach(link => {
+    const menuName = link.dataset.menu;
+    link.addEventListener('mouseenter', (e) => {
+      e.preventDefault();
+      openMenu(menuName);
+    });
+    link.addEventListener('mouseleave', () => {
+      lastInteraction = Date.now();
+      scheduleClose();
+    });
+    link.addEventListener('click', (e) => e.preventDefault());
+  });
+
+  // Update global closeMegaMenu
+  window.closeMegaMenuNew = function() {
+    container.classList.remove('open');
+    const nav = document.querySelector('.landing-nav');
+    if (nav) nav.classList.remove('mega-open');
+    const welcome = document.getElementById('welcome-float');
+    if (welcome) welcome.classList.remove('under-mega');
+  };
+})();
+
+// ── Hover content switching inside 'Tipos de industria' mega menu ──
+(function() {
+  // Solo ejecutar en página de inicio
+  if (!document.querySelector('.landing-nav')) return;
+  
+  const overlay = document.getElementById('mega-tipos');
+  if (!overlay) return;
+  const panel = overlay.querySelector('#mega-tipos-panel');
+  if (!panel) return;
+
+  const defaultHTML = panel.innerHTML;
+
+  const contentMap = {
+    restaurantes: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Restaurantes</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="mega-menu-feature"><span class="icon-inline">🍽️</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Menús y control por porciones</p><p style="font-size:12px;color:#2d4a6e">Optimiza porciones, costos y fichas técnicas por receta.</p></div></div>
+        <div class="mega-menu-feature"><span class="icon-inline">🔁</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Operaciones en tiempo real</p><p style="font-size:12px;color:#2d4a6e">Stock por sala, escandallos y órdenes conectadas al POS.</p></div></div>
+      </div>`,
+    plantas: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Plantas de producción</p>
+      <div style="display:flex;flex-direction:column;gap:12px"><div class="mega-menu-feature"><span class="icon-inline">🏭</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Control de lotes</p><p style="font-size:12px;color:#2d4a6e">Trazabilidad por lote y control de calidad en cada etapa.</p></div></div></div>`,
+    panaderias: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Panaderías y pastelerías</p>
+      <div style="display:flex;flex-direction:column;gap:12px"><div class="mega-menu-feature"><span class="icon-inline">🥐</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Recetas por batch</p><p style="font-size:12px;color:#2d4a6e">Escalado automático de recetas y control de harina y levados.</p></div></div></div>`,
+    cafeterias: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Cafeterías y bebidas</p>
+      <div style="display:flex;flex-direction:column;gap:12px"><div class="mega-menu-feature"><span class="icon-inline">☕</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Control de recetas rápidas</p><p style="font-size:12px;color:#2d4a6e">Gestión de insumos por bebida y control de consumo por turno.</p></div></div></div>`,
+    hoteles: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Hoteles y catering</p>
+      <div style="display:flex;flex-direction:column;gap:12px"><div class="mega-menu-feature"><span class="icon-inline">🏨</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Escalabilidad por eventos</p><p style="font-size:12px;color:#2d4a6e">Planificación y compras centralizadas para banquetes y catering.</p></div></div></div>`,
+    distribuidoras: `<p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:14px">Distribuidoras de alimentos</p>
+      <div style="display:flex;flex-direction:column;gap:12px"><div class="mega-menu-feature"><span class="icon-inline">🛒</span><div><p style="font-weight:700;font-size:14px;color:#1a1a2e">Logística integrada</p><p style="font-size:12px;color:#2d4a6e">Rutas, stock por cliente y sincronización de inventario.</p></div></div></div>`
+  };
+
+  const links = overlay.querySelectorAll('.mega-menu-links a.mega-menu-link');
+  links.forEach(l => {
+    const key = l.dataset.key;
+    l.addEventListener('mouseenter', (e) => {
+      e.preventDefault();
+      if (contentMap[key]) panel.innerHTML = contentMap[key];
+      links.forEach(x => x.classList.toggle('active', x === l));
+    });
+    l.addEventListener('click', e => e.preventDefault());
+  });
+
+  overlay.addEventListener('mouseleave', () => {
+    panel.innerHTML = defaultHTML;
+    links.forEach(x => x.classList.remove('active'));
+  });
+})();
 
 // ── Navigation (multipágina) ──
 // Se mantiene por compatibilidad con código que pueda invocar showPage
@@ -248,8 +443,218 @@ function initCharts() {
 }
 
 // Auto-init charts cuando la página de reportes esté lista
+// Inicialización: solo mantener initCharts() (initEnviosModule fue removido)
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCharts);
+  document.addEventListener('DOMContentLoaded', () => {
+    initCharts();
+  });
 } else {
   initCharts();
 }
+
+/* ============================================================
+   Módulo Pedidos (añadido al final) — variables y helpers
+   ============================================================ */
+
+// Variable global de filtro (no redeclarar si ya existe)
+if (typeof filtroActual === 'undefined') window.filtroActual = 'todos';
+
+// Array temporal de prueba (si no existe)
+if (typeof basePedidosPrueba === 'undefined') window.basePedidosPrueba = [
+  { id: 'ENV-1001', destino: 'Restaurante La Esquina', conductor: 'Carlos R.', ruta: 'verde', estado: 'Pendiente', eta: 'Por asignar', total: '$120.00', fecha: '2026-05-20', insumos: 'Harina, Levadura', observaciones: 'Entrega mañana', badge: 'badge-amber' },
+  { id: 'ENV-1002', destino: 'Cafetería Central', conductor: 'María P.', ruta: 'azul', estado: 'En tránsito', eta: '12:30', total: '$75.50', fecha: '2026-05-21', insumos: 'Café, Azúcar', observaciones: '', badge: 'badge-blue' },
+  { id: 'ENV-1003', destino: 'Panadería El Horno', conductor: '', ruta: '', estado: 'Entregado', eta: '08:10', total: '$200.00', fecha: '2026-05-19', insumos: 'Harina, Manteca', observaciones: 'Firmado por recepción', badge: 'badge-green' }
+];
+
+// Helper local para badge (no sobrescribe si ya existe)
+function _mm_getPedidoBadge(estado) {
+  const map = { 'En tránsito': 'badge-blue', 'Entregado': 'badge-green', 'Pendiente': 'badge-amber' };
+  return map[estado] || 'badge-gray';
+}
+
+// Dibujar filas en tbody#pedidos-tbody
+function actualizarTablaPedidos(filtro, busqueda) {
+  const tbody = document.getElementById('pedidos-tbody');
+  if (!tbody) return;
+  try { 
+    const tbl = document.getElementById('pedidos-tbody')?.parentElement; 
+    if (tbl) tbl.style.minHeight = '280px'; 
+  } catch(e) {}
+  filtro = filtro || window.filtroActual || 'todos';
+  busqueda = (typeof busqueda === 'undefined') ? (document.getElementById('pedidos-search')?.value.trim().toLowerCase() || '') : (busqueda || '').toLowerCase();
+
+  const data = (window.basePedidosPrueba || []).filter(item => {
+    const filterMatches = filtro === 'todos'
+      || (filtro === 'ruta' && item.estado === 'En tránsito')
+      || (filtro === 'pendiente' && item.estado === 'Pendiente')
+      || (filtro === 'entregado' && item.estado === 'Entregado');
+    const searchMatches = busqueda === '' || [item.id, item.destino, item.conductor, item.ruta, item.estado].some(v => (v || '').toString().toLowerCase().includes(busqueda));
+    return filterMatches && searchMatches;
+  });
+
+  tbody.innerHTML = data.map(item => {
+    // Badges unificados: fondo azul pastel + texto azul oscuro
+    const badgeBg = '#eef6ff';
+    const badgeText = '#1e3a8a';
+    
+    return `
+    <tr>
+      <td style="padding:12px 14px;font-size:12px;font-weight:700;color:var(--primary);font-family:'DM Mono',monospace;border-bottom:1px solid var(--border)">${item.id}</td>
+      <td style="padding:12px 14px;font-size:13px;color:var(--black);font-family:'DM Sans',sans-serif;border-bottom:1px solid var(--border)">${item.destino}</td>
+      <td style="padding:12px 14px;font-size:13px;color:var(--text-muted);font-family:'DM Sans',sans-serif;border-bottom:1px solid var(--border)">${item.conductor || 'Por asignar'}</td>
+      <td style="padding:12px 14px;font-size:13px;color:var(--text-muted);font-family:'DM Sans',sans-serif;border-bottom:1px solid var(--border)">${item.ruta || 'Por definir'}</td>
+      <td style="padding:12px 14px;border-bottom:1px solid var(--border)"><span style="display:inline-block;padding:4px 10px;border-radius:6px;background-color:${badgeBg};color:${badgeText};font-size:11px;font-weight:700;font-family:'DM Sans',sans-serif;text-transform:uppercase">${item.estado}</span></td>
+      <td style="padding:12px 14px;font-size:13px;color:var(--text-muted);font-family:'DM Sans',sans-serif;border-bottom:1px solid var(--border)">${item.eta}</td>
+      <td style="padding:12px 14px;font-size:13px;color:var(--black);font-weight:700;font-family:'DM Sans',sans-serif;border-bottom:1px solid var(--border)">${item.total}</td>
+    </tr>
+  `;
+  }).join('');
+}
+
+// setFiltro y filtrarPedidos (no sobrescribir si ya existen)
+if (typeof setFiltro === 'undefined') {
+  window.setFiltro = function(tipo) {
+    window.filtroActual = tipo;
+    // Actualizar estilo botones (si existen)
+    try {
+      const buttons = document.querySelectorAll('#filter-todos, #filter-ruta, #filter-pend, #filter-entregado');
+      buttons.forEach(btn => {
+        const isActive = btn.id === `filter-${tipo}`;
+        btn.style.background = isActive ? 'var(--primary)' : '';
+        btn.style.color = isActive ? '#fff' : '';
+        btn.style.borderColor = isActive ? 'var(--primary)' : '';
+      });
+    } catch (e) {}
+    actualizarTablaPedidos(window.filtroActual);
+  };
+}
+
+if (typeof filtrarPedidos === 'undefined') {
+  window.filtrarPedidos = function() {
+    const q = document.getElementById('pedidos-search')?.value || '';
+    actualizarTablaPedidos(window.filtroActual, q);
+  };
+}
+
+// procesarNuevoPedido — crear y añadir al array temporal (si no existe ya)
+if (typeof procesarNuevoPedido === 'undefined') {
+  // ============================================================
+// CONEXIÓN REAL CON EL BACKEND PHP (Reemplazo Zona A)
+// ============================================================
+
+window.procesarNuevoPedido = function() {
+  const destino = document.getElementById('env-destino')?.value.trim();
+  const fecha = document.getElementById('env-fecha')?.value;
+  const estado = document.getElementById('env-estado')?.value;
+  const insumos = document.getElementById('env-insumos')?.value.trim();
+  const total = document.getElementById('env-total')?.value.trim();
+  const observaciones = document.getElementById('env-obs')?.value.trim();
+
+  if (!destino || !total) {
+    if (typeof showToast === 'function') showToast('Completa los campos obligatorios (Destino y Total)', '⚠️');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('destino', destino);
+  formData.append('fecha', fecha);
+  formData.append('estado', estado);
+  formData.append('insumos', insumos);
+  formData.append('total', total);
+  formData.append('observaciones', observaciones);
+
+  fetch('api/guardar_pedido.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      if (typeof closeModal === 'function') closeModal('modal-env');
+      if (typeof showToast === 'function') showToast('¡Pedido guardado en MySQL!', '✅');
+      setTimeout(() => location.reload(), 800); 
+    } else {
+      alert("Error en el servidor: " + data.message);
+    }
+  })
+  .catch(err => console.error("Error de red en la petición:", err));
+};
+
+window.procesarNuevoInsumo = function() {
+  const nombre = document.getElementById('ins-nombre')?.value.trim();
+  const cantidad = document.getElementById('ins-cantidad')?.value.trim();
+  const unidad = document.getElementById('ins-unidad')?.value;
+  const categoria = document.getElementById('ins-categoria')?.value;
+
+  if (!nombre || !cantidad) {
+    if (typeof showToast === 'function') showToast('Completa los campos obligatorios', '⚠️');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('cantidad', cantidad);
+  formData.append('unidad', unidad);
+  formData.append('categoria', categoria);
+
+  fetch('api/guardar_insumo.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      if (typeof closeModal === 'function') closeModal('modal-insumo');
+      if (typeof showToast === 'function') showToast('Stock actualizado en MySQL', '✅');
+      setTimeout(() => location.reload(), 800);
+    } else {
+      alert("Error en el servidor: " + data.message);
+    }
+  })
+  .catch(err => console.error("Error de red en la petición:", err));
+};
+
+if (typeof showTooltip === 'undefined') {
+  window.showTooltip = function() { /* placeholder: mapa no inicializado */ };
+}
+if (typeof closeTooltip === 'undefined') {
+  window.closeTooltip = function() { /* placeholder */ };
+}
+
+// Inicializar tabla con datos de prueba al cargar (si existe tbody)
+//document.addEventListener('DOMContentLoaded', function() {
+//  actualizarTablaPedidos(window.filtroActual);
+//});
+
+/* Fin Módulo Pedidos */
+}
+window.procesarNuevaReceta = function() {
+  const nombre = document.getElementById('rec-nombre')?.value.trim();
+  const insumos = document.getElementById('rec-insumos')?.value.trim();
+  const rendimiento = document.getElementById('rec-rendimiento')?.value.trim();
+
+  if (!nombre || !insumos || !rendimiento) {
+    alert("Por favor completa todos los campos del formulario.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('insumos', insumos);
+  formData.append('rendimiento', rendimiento);
+
+  fetch('api/guardar_receta.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      if (typeof closeModal === 'function') closeModal('modal-rec');
+      location.reload(); // Refresca para pintar la nueva fórmula de MySQL
+    } else {
+      alert("Error al guardar receta: " + data.message);
+    }
+  })
+  .catch(err => console.error("Error en la petición:", err));
+};

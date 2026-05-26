@@ -4,59 +4,87 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MicroMaster — Reportes</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .sidebar { width: 260px; min-height: 100vh; padding: 8px 10px; background: var(--primary-dark); color: rgba(255,255,255,.92); display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .sidebar-logo-img { width: 44px; height: 44px; border-radius: 14px; object-fit: cover; }
+    .sidebar-logo-title { font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 700; letter-spacing: .04em; color: #f8fafc; }
+    .sidebar-logo-sub { font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-top: -2px; }
+    .sidebar-section-label { font-family: 'Inter', sans-serif; font-size: 8px; text-transform: uppercase; letter-spacing: .20em; color: rgba(255,255,255,.35); margin-top: 2px; margin-bottom: 2px; }
+    .nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; color: rgba(255,255,255,.82); text-decoration: none; font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: .01em; transition: background .2s ease, color .2s ease; }
+    .nav-item:hover { background: rgba(255,255,255,.08); color: #f8fafc; }
+    .nav-icon { width: 22px; height: 22px; display: flex; flex-shrink: 0; align-items: center; justify-content: center; color: rgba(255,255,255,.68); }
+    .nav-item.active { background: rgba(52,211,153,.18); color: #e2f9e7; }
+    .nav-item.active .nav-icon { color: #4ade80; }
+    .nav-item.active:hover { background: rgba(52,211,153,.24); }
+    .sidebar-user { margin-top: auto; padding-top: 6px; border-top: 1px solid rgba(255,255,255,.08); display: flex; flex-direction: column; gap: 3px; }
+    .sidebar-user-name { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #f8fafc; }
+    .sidebar-user-role { font-family: 'Inter', sans-serif; font-size: 12px; color: rgba(255,255,255,.5); }
+    .btn-logout { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); color: rgba(255,255,255,.88); font-family: 'Inter', sans-serif; font-size: 11px; cursor: pointer; transition: background .2s ease, border-color .2s ease; }
+    .btn-logout:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.22); }
+    .btn-logout span { display: inline-flex; align-items: center; }
+  </style>
 </head>
 <body>
 
 <div id="app" class="visible">
 
   <aside class="sidebar">
-    <!-- 🏷️ Logo del sidebar — para cambiar el icono, reemplaza el archivo logo-micromaster.png -->
     <div class="sidebar-logo">
       <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
       <div>
-        <div class="sidebar-logo-text">MicroMaster</div>
+        <div class="sidebar-logo-title">MicroMaster</div>
         <div class="sidebar-logo-sub">Gestión de Insumos</div>
       </div>
     </div>
 
     <div class="sidebar-section-label">Principal</div>
-    <a class="nav-item" href="dashboard.html">
-      <span class="nav-icon">🏠</span><span>Dashboard</span>
+    <a class="nav-item" href="dashboard.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
+      <span>Inicio</span>
     </a>
-    <a class="nav-item" href="inventario.html">
-      <span class="nav-icon">📦</span><span>Inventario</span>
+    <a class="nav-item" href="inventario.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M4 7.5L12 3l8 4.5v9L12 21 4 16.5v-9z" /><path d="M12 3v18" /><path d("M4 7.5l8 4.5 8-4.5" /></svg></span>
+      <span>Inventario</span>
     </a>
-    <a class="nav-item" href="recetas.html">
-      <span class="nav-icon">📋</span><span>Recetas</span>
+    <a class="nav-item" href="recetas.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M8 4h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" /><path d="M8 8h8" /><path d="M12 12h4" /><path d="M12 16h4" /></svg></span>
+      <span>Recetas</span>
     </a>
-    <a class="nav-item" href="envios.html">
-      <span class="nav-icon">🚚</span><span>Envíos</span>
+    <a class="nav-item" href="envios.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M3 12h13l3 5h2" /><path d="M5 12V8a2 2 0 0 1 2-2h9v6" /><circle cx="7.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r("M4,7.5 L1,3 L9,7.5 L9,7.5 L9,7.5 L9,7.5 " /></svg></span>
+      <span>Envíos</span>
     </a>
 
     <div class="sidebar-section-label">Herramientas</div>
-    <a class="nav-item" href="calculadora.html">
-      <span class="nav-icon">🧮</span><span>Calculadora</span>
+    <a class="nav-item" href="calculadora.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><rect x="6" y="3" width="12" height="18" rx="2" /><path d="M10 7h4" /><path d="M10 12h4" /><path d="M10 17h4" /></svg></span>
+      <span>Calculadora</span>
     </a>
-    <a class="nav-item" href="simulador.html">
-      <span class="nav-icon">📈</span><span>Simulador</span>
+    <a class="nav-item" href="simulador.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><polyline points="3 17 9 11 13 15 21 7" /><polyline points="21 11 21 7 17 7" /></svg></span>
+      <span>Simulador</span>
     </a>
-    <a class="nav-item active" href="reportes.html">
-      <span class="nav-icon">📊</span><span>Reportes</span>
+    <a class="nav-item active" href="reportes.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M5 19V10h4v9H5z" /><path d="M10 19V4h4v15h-4z" /><path d="M15 19V14h4v5h-4z" /></svg></span>
+      <span>Reportes</span>
     </a>
-    <a class="nav-item" href="configuracion.html">
-      <span class="nav-icon">⚙️</span><span>Configuración</span>
+    <a class="nav-item" href="configuracion.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="3" /><line x1="19.4" y1="15" x2="21" y2="15" /><line x1="3" y1="15" x2="4.6" y2="15" /><line x1="19.4" y1="9" x2("M4,7.5 L1,3 L9,7.5 L9,7.5 L9,7.5 L9,7.5 " /></svg></span>
+      <span>Configuración</span>
     </a>
-    <a class="nav-item" href="acerca.html">
-      <span class="nav-icon">ℹ️</span><span>Acerca de</span>
+    <a class="nav-item" href="acerca.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="12" /><circle cx="12" cy="16" r="1" /></svg></span>
+      <span>Acerca de</span>
     </a>
 
     <div class="sidebar-user">
       <div class="sidebar-user-name">Admin Principal</div>
       <div class="sidebar-user-role">Administrador</div>
-      <!-- 🚪 Botón cerrar sesión — el estilo se controla en .btn-logout dentro de main.css --><button class="btn-logout" onclick="logout()"><span>🚪</span><span>Cerrar Sesión</span></button>
+      <button class="btn-logout" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="display: block;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg><span>Cerrar Sesión</span></button>
     </div>
   </aside>
 
@@ -73,10 +101,10 @@
 
       <div class="page active" id="page-reportes">
         <div class="tab-row">
-          <button class="tab-btn active" onclick="switchReportTab('metricas', this)">📊 Métricas</button>
-          <button class="tab-btn" onclick="switchReportTab('trazabilidad', this)">📋 Trazabilidad</button>
-          <button class="tab-btn" onclick="switchReportTab('documentos', this)">📄 Documentos</button>
-          <button class="tab-btn" onclick="switchReportTab('descargas', this)">💾 Descargas</button>
+          <button class="tab-btn active" onclick="switchReportTab('metricas', this)"><span class="icon-inline small">📊</span>Métricas</button>
+          <button class="tab-btn" onclick="switchReportTab('trazabilidad', this)"><span class="icon-inline small">📋</span>Trazabilidad</button>
+          <button class="tab-btn" onclick="switchReportTab('documentos', this)"><span class="icon-inline small">📄</span>Documentos</button>
+          <button class="tab-btn" onclick="switchReportTab('descargas', this)"><span class="icon-inline small">💾</span>Descargas</button>
         </div>
 
         <!-- MÉTRICAS -->
@@ -127,7 +155,7 @@
         <div id="rtab-trazabilidad" style="display:none">
           <div class="toolbar">
             <div class="search-box">
-              <span>🔍</span>
+              <span class="icon-inline small">🔍</span>
               <input type="text" placeholder="Buscar en historial...">
             </div>
             <select class="filter-select">
@@ -200,24 +228,24 @@
               </tr></thead>
               <tbody>
                 <tr>
-                  <td>📊 <strong>Inventario_Enero_2024.xlsx</strong></td>
+                  <td><span class="icon-inline small">📊</span><strong>Inventario_Enero_2024.xlsx</strong></td>
                   <td><span class="badge badge-green">Excel</span></td>
                   <td style="font-size:12px">248 KB</td>
                   <td style="font-size:12px">2024-01-15 14:22</td>
                   <td><div class="actions">
-                    <button class="btn btn-xs btn-outline" onclick="demo()">👁️ Ver</button>
-                    <button class="btn btn-xs btn-primary" onclick="demo()">⬇️ Descargar</button>
+                    <button class="btn btn-xs btn-outline" onclick="demo()"><span class="icon-inline small">👁️</span>Ver</button>
+                    <button class="btn btn-xs btn-primary" onclick="demo()"><span class="icon-inline small">⬇️</span>Descargar</button>
                     <button class="btn-icon danger" onclick="demo()">🗑️</button>
                   </div></td>
                 </tr>
                 <tr>
-                  <td>📄 <strong>Reporte_Q4_2023.pdf</strong></td>
+                  <td><span class="icon-inline small">📄</span><strong>Reporte_Q4_2023.pdf</strong></td>
                   <td><span class="badge badge-red">PDF</span></td>
                   <td style="font-size:12px">1.2 MB</td>
                   <td style="font-size:12px">2024-01-10 09:30</td>
                   <td><div class="actions">
-                    <button class="btn btn-xs btn-outline" onclick="demo()">👁️ Ver</button>
-                    <button class="btn btn-xs btn-primary" onclick="demo()">⬇️ Descargar</button>
+                    <button class="btn btn-xs btn-outline" onclick="demo()"><span class="icon-inline small">👁️</span>Ver</button>
+                    <button class="btn btn-xs btn-primary" onclick="demo()"><span class="icon-inline small">⬇️</span>Descargar</button>
                     <button class="btn-icon danger" onclick="demo()">🗑️</button>
                   </div></td>
                 </tr>
@@ -230,46 +258,46 @@
         <div id="rtab-descargas" style="display:none">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
             <div class="calc-panel">
-              <h3>📦 Inventario Actual</h3>
+              <h3><span class="section-icon">📦</span>Inventario Actual</h3>
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Exportar lista completa de insumos con stock y precios</p>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📊</span>Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📋</span>CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📄</span>PDF</button>
               </div>
             </div>
             <div class="calc-panel">
-              <h3>📋 Lista de Recetas</h3>
+              <h3><span class="section-icon">📋</span>Lista de Recetas</h3>
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Recetas activas con costos e insumos detallados</p>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📊</span>Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📋</span>CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📄</span>PDF</button>
               </div>
             </div>
             <div class="calc-panel">
-              <h3>🚚 Historial de Envíos</h3>
+              <h3><span class="section-icon">🚚</span>Historial de Envíos</h3>
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Todos los envíos con estados y montos</p>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📊</span>Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📋</span>CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📄</span>PDF</button>
               </div>
             </div>
             <div class="calc-panel">
-              <h3>🔍 Trazabilidad / Auditoría</h3>
+              <h3><span class="section-icon">🔍</span>Trazabilidad / Auditoría</h3>
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Historial completo de cambios del sistema</p>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="btn btn-outline btn-sm" onclick="demo()">📊 Excel</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📋 CSV</button>
-                <button class="btn btn-outline btn-sm" onclick="demo()">📄 PDF</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📊</span>Excel</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📋</span>CSV</button>
+                <button class="btn btn-outline btn-sm" onclick="demo()"><span class="icon-inline small">📄</span>PDF</button>
               </div>
             </div>
             <div class="calc-panel">
-              <h3>📊 Resumen de Métricas</h3>
+              <h3><span class="section-icon">📊</span>Resumen de Métricas</h3>
               <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">KPIs y gráficos del sistema en un reporte ejecutivo</p>
               <div style="display:flex;gap:8px">
-                <button class="btn btn-primary btn-sm" onclick="demo()">📄 Descargar PDF</button>
+                <button class="btn btn-primary btn-sm" onclick="demo()"><span class="icon-inline small">📄</span>Descargar PDF</button>
               </div>
             </div>
           </div>
@@ -350,12 +378,12 @@
 
 <!-- Toast -->
 <div class="toast" id="toast">
-  <span id="toast-icon">✅</span>
+  <span id="toast-icon" class="icon-inline small">✅</span>
   <span id="toast-msg">Acción completada</span>
 </div>
 
 
-<script src="datos/datos.js"></script>
+
 <script src="assets/js/main.js"></script>
 </body>
 </html>
