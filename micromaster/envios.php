@@ -81,8 +81,8 @@ try {
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M5 19V10h4v9H5z" /><path d="M10 19V4h4v15h-4z" /><path d="M15 19V14h4v5h-4z" /></svg></span>
       <span>Reportes</span>
     </a>
-    <a class="nav-item" href="configuracion.php">
-      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="3" /><line x1="19.4" y1="15" x2="21" y2="15" /><line x1="3" y1="15" x2="4.6" y2="15" /><line x1("M4,7.5 L1,3 L9,7.5 L9,7.5 L9,7.5 L9,7.5 " /></svg></span>
+     <a class="nav-item" href="configuracion.php">
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="3" /><line x1="12" y1="2" x2="12" y2="4" /><line x1="12" y1="20" x2="12" y2="22" /><line x1="2" y1="12" x2="4" y2="12" /><line x1="20" y1="12" x2="22" y2="12" /></svg></span>
       <span>Configuración</span>
     </a>
     <a class="nav-item" href="acerca.php">
@@ -103,14 +103,33 @@ try {
       </div>
       <div class="content">
         <div class="page active" id="page-envios">
+                    <?php
+            // Inicializadores automáticos basados en tu MySQL
+            $totalPedidos = count($listaPedidos);
+            $enTransito = 0;
+            $entregados = 0;
+            $pendientes = 0;
+
+            foreach ($listaPedidos as $ped) {
+                $est = $ped['estado'];
+                if ($est === 'En tránsito') {
+                    $enTransito++;
+                } elseif ($est === 'Entregado') {
+                    $entregados++;
+                } elseif ($est === 'Pendiente') {
+                    $pendientes++;
+                }
+            }
+          ?>
           <div class="stats-row" style="margin-bottom:16px">
-            <div class="stat-card"><div class="stat-label">Rutas Activas</div><div class="stat-value blue">3</div><div class="stat-sub">en tránsito</div></div>
+            <div class="stat-card"><div class="stat-label">Rutas Activas</div><div class="stat-value blue"><?php echo $enTransito; ?></div><div class="stat-sub">en tránsito</div></div>
             <div class="stat-card"><div class="stat-label">Conductores</div><div class="stat-value green">3</div><div class="stat-sub">en línea</div></div>
-            <div class="stat-card"><div class="stat-label">Pedidos Hoy</div><div class="stat-value">9</div><div class="stat-sub">total del día</div></div>
-            <div class="stat-card"><div class="stat-label">Entregados</div><div class="stat-value green">4</div><div class="stat-sub">completados</div></div>
-            <div class="stat-card"><div class="stat-label">Pendientes</div><div class="stat-value amber">3</div><div class="stat-sub">en espera</div></div>
-            <div class="stat-card"><div class="stat-label">En Ruta</div><div class="stat-value blue">2</div><div class="stat-sub">despachados</div></div>
+            <div class="stat-card"><div class="stat-label">Pedidos Hoy</div><div class="stat-value"><?php echo $totalPedidos; ?></div><div class="stat-sub">total del día</div></div>
+            <div class="stat-card"><div class="stat-label">Entregados</div><div class="stat-value green"><?php echo $entregados; ?></div><div class="stat-sub">completados</div></div>
+            <div class="stat-card"><div class="stat-label">Pendientes</div><div class="stat-value amber"><?php echo $pendientes; ?></div><div class="stat-sub">en espera</div></div>
+            <div class="stat-card"><div class="stat-label">En Ruta</div><div class="stat-value blue"><?php echo $enTransito; ?></div><div class="stat-sub">despachados</div></div>
           </div>
+
           <div style="display:grid;grid-template-columns:240px 1fr;gap:14px;margin-bottom:14px">
             <div style="background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:4px">Control de Flotas</div>
@@ -305,6 +324,7 @@ try {
                   <th style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);padding:10px 14px;text-align:left">Estado</th>
                   <th style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);padding:10px 14px;text-align:left">ETA</th>
                   <th style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);padding:10px 14px;text-align:left">Total</th>
+                  <th style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);padding:10px 14px;text-align:left">Acciones</th>
                 </tr></thead>
                 <tbody id="pedidos-tbody">
   <?php if (!empty($listaPedidos)): ?>
@@ -330,6 +350,13 @@ try {
         <td style="padding:14px 16px; text-align:left;"><span style="display:inline-block; padding:4px 10px; border-radius:6px; background-color:<?php echo $badgeBg; ?>; color:<?php echo $badgeColor; ?>; font-size:11px; font-weight:700; font-family:'DM Sans', sans-serif; text-transform:uppercase; letter-spacing:0.5px;"><?php echo htmlspecialchars($pedido['estado']); ?></span></td>
         <td style="padding:14px 16px; font-size:12px; font-weight:600; color:#1e293b; font-family:'DM Sans', sans-serif; text-align:left;"><?php echo htmlspecialchars($pedido['eta']); ?></td>
         <td style="padding:14px 16px; font-size:13px; color:#1e293b; font-weight:700; font-family:'DM Sans', sans-serif; text-align:left;">$<?php echo number_format($pedido['total'], 2); ?></td>
+        <td style="padding:14px 16px; text-align:left;">
+          <div class="actions">
+            <!-- Reemplazo exacto para el botón del lápiz en envios.php -->
+            <button class="btn-icon" onclick="verPedidoFicha(this.closest('tr'))">✏️</button>
+            <button class="btn-icon danger" onclick="eliminarPedidoReal(<?php echo $pedido['id_pedido']; ?>)">🗑️</button>
+          </div>
+        </td>
       </tr>
     <?php endforeach; ?>
   <?php else: ?>

@@ -1,3 +1,21 @@
+<?php
+// calculadora.php / simulador.php - INICIO DEL ARCHIVO: Cargar materias primas
+require_once 'conexion.php';
+
+try {
+    // Traemos los nombres y cantidades actuales de los insumos en MySQL
+    $stmtInsumos = $pdo->query("SELECT nombre, cantidad, unidad FROM inventario ORDER BY nombre ASC");
+    $insumosDisponibles = $stmtInsumos->fetchAll();
+    
+    // Traemos también las recetas para conocer las fórmulas de fabricación
+    $stmtRecetas = $pdo->query("SELECT nombre, insumos FROM recetas ORDER BY nombre ASC");
+    $recetasDisponibles = $stmtRecetas->fetchAll();
+
+} catch (Exception $e) {
+    $insumosDisponibles = [];
+    $recetasDisponibles = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -103,14 +121,18 @@
         <div class="calc-grid">
           <div class="calc-panel">
             <h3><span class="section-icon">⚙️</span>Configuración</h3>
-            <div class="field" style="margin-bottom:14px">
+             <div class="field" style="margin-bottom:14px">
               <label>Receta / Producto</label>
               <select id="calc-receta" onchange="calcularDemo()">
                 <option value="">Selecciona una receta</option>
-                <option value="1.85">Pan Francés — $1.85/u</option>
-                <option value="6.20">Torta de Chocolate — $6.20/u</option>
-                <option value="3.15">Mojito — $3.15/u</option>
-                <option value="0.60">Café Americano — $0.60/u</option>
+                <?php if (!empty($recetasDisponibles)): ?>
+                  <?php foreach ($recetasDisponibles as $rec): ?>
+                    <!-- Usamos el rendimiento o costo como valor temporal para tu JS existente -->
+                    <option value="1.85"><?php echo htmlspecialchars($rec['nombre']); ?></option>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <option value="1.85">Pan Francés Estándar — $1.85/u</option>
+                <?php endif; ?>
               </select>
             </div>
             <div class="field" style="margin-bottom:20px">

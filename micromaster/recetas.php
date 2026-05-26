@@ -112,20 +112,37 @@ try {
     <div class="content">
 
       <div class="page active" id="page-recetas">
-        <div class="stats-row">
+                <div class="stats-row">
+          <!-- 1. TOTAL DE RECETAS DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Total Recetas</div>
-            <div class="stat-value">4</div>
+            <div class="stat-value"><?php echo count($listaRecetas); ?></div>
             <div class="stat-sub">activas</div>
           </div>
+
+          <!-- 2. COSTO PROMEDIO REAL (Calculado desde tu Base de Datos) -->
           <div class="stat-card">
             <div class="stat-label">Costo Promedio</div>
-            <div class="stat-value green">$3.45</div>
+            <?php 
+              $sumaCostos = 0;
+              foreach ($listaRecetas as $r) {
+                  // Limpiamos el texto ($ y espacios) para sumarlo numéricamente
+                  $sumaCostos += floatval(str_replace(['$', ' '], '', $r['rendimiento']));
+              }
+              $promedio = count($listaRecetas) > 0 ? $sumaCostos / count($listaRecetas) : 0;
+            ?>
+            <div class="stat-value green">$<?php echo number_format($promedio, 2); ?></div>
             <div class="stat-sub">por receta</div>
           </div>
+
+          <!-- 3. CATEGORÍAS DISTINTAS REALES EN MYSQL -->
           <div class="stat-card">
             <div class="stat-label">Categorías</div>
-            <div class="stat-value blue">3</div>
+            <?php 
+              // Filtramos las categorías únicas que tienes registradas
+              $categoriasUnicas = array_unique(array_column($listaRecetas, 'categoria'));
+            ?>
+            <div class="stat-value blue"><?php echo count($categoriasUnicas); ?></div>
             <div class="stat-sub">distintas</div>
           </div>
         </div>
@@ -171,9 +188,11 @@ try {
         <td style="padding:14px 16px; text-align:left;"><span class="badge badge-green">Activa</span></td>
         <td style="padding:14px 16px; text-align:left;">
           <div class="actions">
-            <button class="btn-icon">👁️</button>
-            <button class="btn-icon">✏️</button>
-            <button class="btn-icon danger">🗑️</button>
+           <!-- Reemplaza los dos botones para activar la edición diferenciada de recetas -->
+          <button class="btn-icon" onclick="verRecetaFicha(this.closest('tr'), true)">✏️</button>
+          <button class="btn-icon" onclick="verRecetaFicha(this.closest('tr'), false)">👁️</button>
+
+            <button class="btn-icon danger" onclick="eliminarRecetaReal(<?php echo $receta['id_receta']; ?>)">🗑️</button>
           </div>
         </td>
       </tr>

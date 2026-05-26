@@ -1,3 +1,26 @@
+<?php
+// reportes.php - INICIO DEL ARCHIVO: Consultas de analítica masiva
+require_once 'conexion.php';
+
+try {
+    // Consulta real A: Contar los registros actuales de mi tabla `inventario`
+    $stmtTotalInsumos = $pdo->query("SELECT COUNT(*) FROM inventario");
+    $totalInsumosReporte = $stmtTotalInsumos->fetchColumn() ?? 0;
+
+    // Consulta real B: Contar el volumen total de registros en mi tabla `pedidos`
+    $stmtTotalEnvios = $pdo->query("SELECT COUNT(*) FROM pedidos");
+    $totalEnviosReporte = $stmtTotalEnvios->fetchColumn() ?? 0;
+
+    // Consulta real C: Sumar numéricamente los totales de los pedidos entregados limpianzo el formato de texto si es necesario
+    $stmtVentas = $pdo->query("SELECT SUM(REPLACE(REPLACE(total, '$', ''), ',', '')) FROM pedidos WHERE estado = 'Entregado'");
+    $ventasTotales = $stmtVentas->fetchColumn() ?? 0;
+
+} catch (Exception $e) {
+    $totalInsumosReporte = 0;
+    $totalEnviosReporte = 0;
+    $ventasTotales = 0;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -112,17 +135,17 @@
           <div class="kpi-grid">
             <div class="kpi-card">
               <div class="kpi-icon">💰</div>
-              <div class="kpi-value">$846</div>
+              <div class="kpi-value">$<?php echo number_format($ventasTotales, 2); ?></div>
               <div class="kpi-label">Valor Inventario</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-icon">📋</div>
-              <div class="kpi-value">$2.95</div>
+              <div class="kpi-value"><?php echo $totalEnviosReporte; ?></div>
               <div class="kpi-label">Costo Prom. Receta</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-icon">⚠️</div>
-              <div class="kpi-value" style="color:var(--amber)">2</div>
+              <div class="kpi-value" style="color:var(--amber)"><?php echo $totalInsumosReporte; ?></div>
               <div class="kpi-label">Alertas Activas</div>
             </div>
             <div class="kpi-card">
@@ -381,9 +404,6 @@
   <span id="toast-icon" class="icon-inline small">✅</span>
   <span id="toast-msg">Acción completada</span>
 </div>
-
-
-
 <script src="assets/js/main.js"></script>
 </body>
 </html>

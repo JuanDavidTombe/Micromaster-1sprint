@@ -1,3 +1,12 @@
+<?php
+require_once 'conexion.php';
+try {
+    $stmtRecetas = $pdo->query("SELECT nombre, rendimiento FROM recetas ORDER BY nombre ASC");
+    $recetasDisponibles = $stmtRecetas->fetchAll();
+} catch (Exception $e) {
+    $recetasDisponibles = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +15,7 @@
 <title>MicroMaster — Simulador</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
-
+ 
 <style>
     .sidebar { width: 260px; min-height: 100vh; padding: 8px 10px; background: var(--primary-dark); color: rgba(255,255,255,.92); display: flex; flex-direction: column; gap: 2px; }
     .sidebar-logo { display: flex; align-items: center; gap: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.08); }
@@ -29,9 +38,9 @@
   </style>
 </head>
 <body>
-
+ 
 <div id="app" class="visible">
-
+ 
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="assets/img/WhatsApp Image 2025-07-07 at 2.53.03 PM.png" alt="MicroMaster" class="sidebar-logo-img">
@@ -40,14 +49,14 @@
         <div class="sidebar-logo-sub">Gestión de Insumos</div>
       </div>
     </div>
-
+ 
     <div class="sidebar-section-label">Principal</div>
     <a class="nav-item" href="dashboard.php">
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
       <span>Inicio</span>
     </a>
     <a class="nav-item" href="inventario.php">
-      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width("M4,7.5 L1,3 L9,7.5 L9,7.5 L9,7.5 L9,7.5 " /></svg></span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M4 7.5L12 3l8 4.5v9L12 21 4 16.5v-9z" /><path d="M12 3v18" /><path d="M4 7.5l8 4.5 8-4.5" /></svg></span>
       <span>Inventario</span>
     </a>
     <a class="nav-item" href="recetas.php">
@@ -58,7 +67,7 @@
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><path d="M3 12h13l3 5h2" /><path d="M5 12V8a2 2 0 0 1 2-2h9v6" /><circle cx="7.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /><path d="M16 7h4v5" /></svg></span>
       <span>Envíos</span>
     </a>
-
+ 
     <div class="sidebar-section-label">Herramientas</div>
     <a class="nav-item" href="calculadora.php">
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><rect x="6" y="3" width="12" height="18" rx="2" /><path d="M10 7h4" /><path d="M10 12h4" /><path d="M10 17h4" /></svg></span>
@@ -73,21 +82,21 @@
       <span>Reportes</span>
     </a>
     <a class="nav-item" href="configuracion.php">
-      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="3" /><line x1="19.4" y1="15" x2="21" y2="15" /><line x1="3" y1="15" x2="4.6" y2="15" /><line x1="19.4" y1="9" x2="21" y2="9" /><line x1="3" y1="9" x2("M4,7.5 L1,3 L9,7.5 L9,7.5 L9,7.5 L9,7.5 " /></svg></span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="3" /><line x1="19.4" y1="15" x2="21" y2="15" /><line x1="3" y1="15" x2="4.6" y2="15" /><line x1="19.4" y1="9" x2="21" y2="9" /><line x1="3" y1="9" x2="4.6" y2="9" /></svg></span>
       <span>Configuración</span>
     </a>
     <a class="nav-item" href="acerca.php">
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" style="display: block;"><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="12" /><circle cx="12" cy="16" r="1" /></svg></span>
       <span>Acerca de</span>
     </a>
-
+ 
     <div class="sidebar-user">
       <div class="sidebar-user-name">Admin Principal</div>
       <div class="sidebar-user-role">Administrador</div>
       <button class="btn-logout" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="display: block;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg><span>Cerrar Sesión</span></button>
     </div>
   </aside>
-
+ 
   <!-- MAIN -->
   <div class="main">
     <div class="topbar">
@@ -96,9 +105,9 @@
         <div class="topbar-date" id="topbar-date"></div>
       </div>
     </div>
-
+ 
     <div class="content">
-
+ 
       <div class="page active" id="page-simulador">
         <div class="calc-grid">
           <div class="calc-panel">
@@ -107,10 +116,20 @@
               <label>Receta</label>
               <select id="sim-receta" onchange="simularDemo()">
                 <option value="">Selecciona receta</option>
-                <option value="1.85">Pan Francés — $1.85/u</option>
-                <option value="6.20">Torta de Chocolate — $6.20/u</option>
-                <option value="3.15">Mojito — $3.15/u</option>
-                <option value="0.60">Café Americano — $0.60/u</option>
+                <?php if (!empty($recetasDisponibles)): ?>
+                  <?php foreach ($recetasDisponibles as $receta): ?>
+                    <?php
+                      $costoLimpio = str_replace(['$', ' '], '', $receta['rendimiento']);
+                      $costoNumero = floatval($costoLimpio);
+                    ?>
+                    <option value="<?php echo $costoNumero; ?>">
+                      <?php echo htmlspecialchars($receta['nombre']); ?> — <?php echo htmlspecialchars($receta['rendimiento']); ?>/u
+                    </option>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <option value="1.85">Pan Francés — $1.85/u</option>
+                  <option value="6.20">Torta de Chocolate — $6.20/u</option>
+                <?php endif; ?>
               </select>
             </div>
             <div class="field" style="margin-bottom:14px">
@@ -124,7 +143,7 @@
             <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="simularDemo()">🔄 Simular</button>
             <button class="btn btn-outline" style="width:100%" onclick="resetSim()">Resetear</button>
           </div>
-
+ 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start">
             <div class="calc-panel" style="text-align:center">
               <div class="calc-label-sm">Costo Original</div>
@@ -147,11 +166,11 @@
           </div>
         </div>
       </div>
-
+ 
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
-
+ 
 <!-- Modal Inventario -->
 <div class="modal-overlay" id="modal-inv">
   <div class="modal">
@@ -176,7 +195,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Modal Recetas -->
 <div class="modal-overlay" id="modal-rec">
   <div class="modal">
@@ -197,7 +216,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Modal Envíos -->
 <div class="modal-overlay" id="modal-env">
   <div class="modal">
@@ -219,15 +238,12 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Toast -->
 <div class="toast" id="toast">
   <span id="toast-icon" class="icon-inline small">✅</span>
   <span id="toast-msg">Acción completada</span>
 </div>
-
-
-
 <script src="assets/js/main.js"></script>
 </body>
 </html>

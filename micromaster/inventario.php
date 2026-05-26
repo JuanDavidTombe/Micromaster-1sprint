@@ -112,33 +112,66 @@ try {
     <div class="content">
 
       <div class="page active" id="page-inventario">
-        <div class="stats-row">
+                <div class="stats-row">
+          <?php
+            // Inicializamos contadores reales basados en tus datos de MySQL
+            $totalInsumos = count($listaInsumos);
+            $disponibles = 0;
+            $stockBajo = 0;
+            $agotados = 0;
+            $valorTotalInventario = 0;
+
+            foreach ($listaInsumos as $ins) {
+                $cant = floatval($ins['cantidad']);
+                // Se calcula la valorización asumiendo el precio base de 0.85
+                $valorTotalInventario += ($cant * 0.85);
+
+                if ($cant == 0) {
+                    $agotados++;
+                } elseif ($cant < 20) {
+                    $stockBajo++;
+                } else {
+                    $disponibles++;
+                }
+            }
+          ?>
+
+          <!-- 1. TOTAL INSUMOS DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Total Insumos</div>
-            <div class="stat-value">8</div>
+            <div class="stat-value"><?php echo $totalInsumos; ?></div>
             <div class="stat-sub">en sistema</div>
           </div>
+
+          <!-- 2. DISPONIBLES DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Disponibles</div>
-            <div class="stat-value green">5</div>
-            <div class="stat-sub">OK</div>
+            <div class="stat-value green"><?php echo $disponibles; ?></div>
+            <div class="stat-sub">En stock</div>
           </div>
+
+          <!-- 3. STOCK BAJO DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Stock Bajo</div>
-            <div class="stat-value amber">2</div>
+            <div class="stat-value amber"><?php echo $stockBajo; ?></div>
             <div class="stat-sub">bajo mínimo</div>
           </div>
+
+          <!-- 4. AGOTADOS DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Agotados</div>
-            <div class="stat-value red">1</div>
+            <div class="stat-value red"><?php echo $agotados; ?></div>
             <div class="stat-sub">sin stock</div>
           </div>
+
+          <!-- 5. VALOR TOTAL DINÁMICO -->
           <div class="stat-card">
             <div class="stat-label">Valor Total</div>
-            <div class="stat-value blue">$846</div>
+            <div class="stat-value green">$<?php echo number_format($valorTotalInventario, 0, ',', '.'); ?></div>
             <div class="stat-sub">inventario</div>
           </div>
         </div>
+
 
         <div class="toolbar">
           <div class="search-box">
@@ -214,8 +247,9 @@ try {
         </td>
         <td style="padding:14px 16px; text-align:left;">
           <div class="actions">
-            <button class="btn-icon">✏️</button>
-            <button class="btn-icon danger">🗑️</button>
+            <button class="btn-icon" onclick="verInsumoFicha(this.closest('tr'), true)">✏️</button>
+            <button class="btn-icon" onclick="verInsumoFicha(this.closest('tr'), false)">👁️</button>
+            <button class="btn-icon danger" onclick="eliminarInsumoReal(<?php echo $insumo['id_insumo']; ?>)">🗑️</button>
           </div>
         </td>
       </tr>
@@ -280,8 +314,6 @@ try {
     </div>
   </div>
 </div>
-
-
 <!-- Modal Recetas -->
 <div class="modal-overlay" id="modal-rec">
   <div class="modal">
@@ -330,9 +362,6 @@ try {
   <span id="toast-icon" class="icon-inline small">✅</span>
   <span id="toast-msg">Acción completada</span>
 </div>
-
-
-
 <script src="assets/js/main.js"></script>
 </body>
 </html>

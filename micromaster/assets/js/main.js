@@ -630,6 +630,7 @@ if (typeof closeTooltip === 'undefined') {
 }
 window.procesarNuevaReceta = function() {
   const nombre = document.getElementById('rec-nombre')?.value.trim();
+  const categoria = document.getElementById('rec-categoria')?.value;
   const insumos = document.getElementById('rec-insumos')?.value.trim();
   const rendimiento = document.getElementById('rec-rendimiento')?.value.trim();
 
@@ -640,6 +641,7 @@ window.procesarNuevaReceta = function() {
 
   const formData = new FormData();
   formData.append('nombre', nombre);
+  formData.append('categoria', categoria);
   formData.append('insumos', insumos);
   formData.append('rendimiento', rendimiento);
 
@@ -657,4 +659,363 @@ window.procesarNuevaReceta = function() {
     }
   })
   .catch(err => console.error("Error en la petición:", err));
+};
+/* SISTEMA DE ELIMINACIÓN ASYNC */
+window.procesarNuevaReceta = function() {
+  const nombre = document.getElementById('rec-nombre')?.value.trim();
+  const categoria = document.getElementById('rec-categoria')?.value;
+  const insumos = document.getElementById('rec-insumos')?.value.trim();
+  const rendimiento = document.getElementById('rec-rendimiento')?.value.trim();
+
+  if (!nombre || !insumos || !rendimiento) {
+    alert("Por favor completa todos los campos del formulario.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('categoria', categoria);
+  formData.append('insumos', insumos);
+  formData.append('rendimiento', rendimiento);
+
+  fetch('api/guardar_receta.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      if (typeof closeModal === 'function') closeModal('modal-rec');
+      location.reload(); 
+    } else {
+      alert("Error al guardar receta: " + data.message);
+    }
+  })
+  .catch(err => console.error("Error en la petición:", err));
+};
+
+// ============================================================
+// 🗑️ SISTEMA DE ELIMINACIÓN ASÍNCRONA REAL GLOBAL
+// ============================================================
+window.eliminarInsumoReal = function(id) {
+  if (confirm("🚨 ¿Estás seguro de que deseas eliminar este insumo de forma permanente en MySQL?")) {
+    const formData = new FormData();
+    formData.append('id', id);
+    
+    fetch('api/eliminar_insumo.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        location.reload();
+      } else {
+        alert("Error al eliminar: " + data.message);
+      }
+    })
+    .catch(err => console.error("Error en la petición:", err));
+  }
+};
+
+window.eliminarPedidoReal = function(id) {
+  if (confirm("🚨 ¿Estás seguro de que deseas eliminar este pedido de forma permanente en MySQL?")) {
+    const formData = new FormData();
+    formData.append('id', id);
+    
+    fetch('api/eliminar_pedido.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        location.reload();
+      } else {
+        alert("Error al eliminar: " + data.message);
+      }
+    })
+    .catch(err => console.error("Error en la petición:", err));
+  }
+};
+
+window.eliminarRecetaReal = function(id) {
+  if (confirm("🚨 ¿Estás seguro de que deseas eliminar esta receta de forma permanente en MySQL?")) {
+    const formData = new FormData();
+    formData.append('id', id);
+    
+    fetch('api/eliminar_receta.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        location.reload();
+      } else {
+        alert("Error al eliminar: " + data.message);
+      }
+    })
+    .catch(err => console.error("Error en la petición:", err));
+  }
+};
+// ============================================================
+// 👁️ VISUALIZADOR DINÁMICO DE FICHAS TÉCNICAS (OJO Y LÁPIZ)
+// ============================================================
+// ============================================================
+// 👁️ VISUALIZADOR INTELIGENTE DE FICHAS TÉCNICAS PARA RECETAS
+// ============================================================
+// ============================================================
+// 👁️ VISUALIZADOR INTELIGENTE DE FICHAS TÉCNICAS PARA INVENTARIO
+// ============================================================
+// ============================================================
+// 👁️✏️ SISTEMA MAESTRO UNIFICADO DE INVENTARIO (OJO Y LÁPIZ REAL)
+// ============================================================
+window.verInsumoFicha = function(fila, esEdicion) {
+    if (!fila) return;
+    
+    // 1. Extraemos los textos de la fila (Tu lógica funcional intacta)
+    const celdas = fila.getElementsByTagName('td');
+    if (celdas.length < 3) return;
+
+    const nombreReal = celdas[0].querySelector('strong')?.innerText || celdas[0].innerText;
+    const categoriaReal = celdas[1].innerText.trim();
+    const textoStock = celdas[2].innerText.trim();
+    const numeroLimpio = parseFloat(textoStock.replace(/[^\d.]/g, '')) || 0;
+    const unidadLimpia = textoStock.includes('L') ? 'L' : (textoStock.includes('ml') ? 'ml' : (textoStock.includes('g') ? 'g' : 'kg'));
+
+    // 2. Mapeamos los inputs del modal
+    const inputNombre = document.getElementById('ins-nombre');
+    const selectCategoria = document.getElementById('ins-categoria');
+    const inputCantidad = document.getElementById('ins-cantidad');
+    const selectUnidad = document.getElementById('ins-unidad');
+
+    // 3. Inyectamos los datos reales de MySQL en los campos
+    if (inputNombre) inputNombre.value = nombreReal.trim();
+    if (selectCategoria) selectCategoria.value = categoriaReal;
+    if (inputCantidad) inputCantidad.value = numeroLimpio;
+    if (selectUnidad) selectUnidad.value = unidadLimpia;
+
+    // 4. Cambiamos el botón del modal según el botón presionado (Ojo o Lápiz)
+    const botonModal = document.querySelector('#modal-inv .btn-primary');
+    if (botonModal) {
+        if (esEdicion) {
+            // Configuración para el LÁPIZ: Habilitar inputs y activar API real
+            if (inputCantidad) inputCantidad.disabled = false;
+            if (selectCategoria) selectCategoria.disabled = false;
+            if (selectUnidad) selectUnidad.disabled = false;
+            
+            botonModal.innerText = "Actualizar Insumo";
+            botonModal.setAttribute('onclick', 'guardarCambiosInsumoBD()');
+        } else {
+            // Configuración para el OJO: Solo lectura, bloqueamos campos
+            if (inputCantidad) inputCantidad.disabled = true;
+            if (selectCategoria) selectCategoria.disabled = true;
+            if (selectUnidad) selectUnidad.disabled = true;
+            
+            botonModal.innerText = "Cerrar Vista";
+            botonModal.setAttribute('onclick', "closeModal('modal-inv')");
+        }
+    }
+
+    // 5. Abrimos el modal visualmente
+    if (typeof openModal === 'function') openModal('modal-inv');
+};
+
+// Función asíncrona real encargada de enviar los datos modificados a MySQL
+window.guardarCambiosInsumoBD = function() {
+    const nombre = document.getElementById('ins-nombre')?.value.trim();
+    const categoria = document.getElementById('ins-categoria')?.value;
+    const cantidad = document.getElementById('ins-cantidad')?.value.trim();
+    const unidad = document.getElementById('ins-unidad')?.value;
+
+    const formData = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('categoria', categoria);
+    formData.append('cantidad', cantidad);
+    formData.append('unidad', unidad);
+
+    fetch('api/editar_insumo.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (typeof closeModal === 'function') closeModal('modal-inv');
+            location.reload(); // Recargamos para ver el cambio guardado en phpMyAdmin
+        } else {
+            alert("Error al actualizar: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error en la red:", err));
+};
+// ============================================================
+// 👁️✏️ SISTEMA MAESTRO UNIVERSAL DE INVENTARIO (OJO Y LÁPIZ REPARADO)
+// ============================================================
+// ============================================================
+// 👁️✏️ SISTEMA MAESTRO UNIVERSAL DE RECETAS (OJO Y LÁPIZ REAL)
+// ============================================================
+window.verRecetaFicha = function(fila, esEdicion) {
+    if (!fila) return;
+    
+    // 1. Extraemos los textos directamente de las celdas de la tabla (td)
+    const celdas = fila.getElementsByTagName('td');
+    if (celdas.length < 4) return;
+
+    // Obtener nombre limpiando etiquetas strong
+    const nombreFormula = celdas[0].querySelector('strong')?.innerText || celdas[0].innerText.split('\n')[0];
+    
+    // Obtener el identificador del código (ej: REC-001) guardado en la etiqueta pequeña
+    const codigoReal = celdas[0].querySelector('span')?.innerText || '';
+    
+    // Obtener la categoría del badge
+    const categoriaTexto = celdas[1].querySelector('.badge')?.innerText || celdas[1].innerText.trim();
+    
+    // Obtener los ingredientes e insumos
+    const insumosTexto = celdas[2].innerText.trim();
+    
+    // Obtener el costo de rendimiento limpiando el signo de pesos ($)
+    const costoTexto = celdas[3].innerText.replace('$', '').trim();
+
+    // 2. Mapeamos los inputs reales de tu modal de recetas
+    const inputNombre = document.getElementById('rec-nombre');
+    const selectCategoria = document.getElementById('rec-categoria');
+    const inputInsumos = document.getElementById('rec-insumos');
+    const inputRendimiento = document.getElementById('rec-rendimiento');
+
+    // 3. Inyectamos los valores de phpMyAdmin dentro del formulario
+    if (inputNombre) inputNombre.value = nombreFormula.trim();
+    if (selectCategoria) selectCategoria.value = categoriaTexto;
+    if (inputInsumos) inputInsumos.value = insumosTexto;
+    if (inputRendimiento) inputRendimiento.value = costoTexto;
+
+    // 4. Cambiamos el comportamiento y el botón azul del modal según la acción
+    const botonModal = document.querySelector('#modal-rec .btn-primary');
+    if (botonModal) {
+        if (esEdicion) {
+            // Si es el LÁPIZ: Liberamos los campos para escribir y preparamos la API de MySQL
+            if (inputNombre) inputNombre.disabled = false;
+            if (selectCategoria) selectCategoria.disabled = false;
+            if (inputInsumos) inputInsumos.disabled = false;
+            if (inputRendimiento) inputRendimiento.disabled = false;
+            
+            botonModal.innerText = "Actualizar Receta";
+            // Guardamos el código identificador de la fila de forma segura en la llamada
+            botonModal.setAttribute('onclick', `guardarCambiosRecetaBD('${codigoReal}')`);
+        } else {
+            // Si es el OJO: Solo lectura, bloqueamos todas las cajas
+            if (inputNombre) inputNombre.disabled = true;
+            if (selectCategoria) selectCategoria.disabled = true;
+            if (inputInsumos) inputInsumos.disabled = true;
+            if (inputRendimiento) inputRendimiento.disabled = true;
+            
+            botonModal.innerText = "Cerrar Vista";
+            botonModal.setAttribute('onclick', "closeModal('modal-rec')");
+        }
+    }
+
+    // 5. Abrimos el modal de recetas visualmente en tu interfaz
+    if (typeof openModal === 'function') {
+        openModal('modal-rec');
+    } else {
+        const modal = document.getElementById('modal-rec');
+        if (modal) modal.classList.add('open');
+    }
+};
+
+// Función asíncrona real encargada de enviar los cambios modificados a MySQL
+window.guardarCambiosRecetaBD = function(codigo) {
+    const nombre = document.getElementById('rec-nombre')?.value.trim();
+    const categoria = document.getElementById('rec-categoria')?.value;
+    const insumos = document.getElementById('rec-insumos')?.value.trim();
+    const rendimiento = document.getElementById('rec-rendimiento')?.value.trim();
+
+    const formData = new FormData();
+    formData.append('id', codigo); // Enviamos el código identificador único (REC-XXX)
+    formData.append('nombre', nombre);
+    formData.append('categoria', categoria);
+    formData.append('insumos', insumos);
+    formData.append('rendimiento', '$' + rendimiento); // Le concatenamos el signo pesos para que conserve tu formato original de BD
+
+    fetch('api/editar_receta.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (typeof closeModal === 'function') closeModal('modal-rec');
+            location.reload(); // Recargamos la página para ver el cambio real de phpMyAdmin en pantalla
+        } else {
+            alert("Error al actualizar: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error de red:", err));
+};
+// Función asíncrona real encargada de enviar los cambios de Envíos a MySQL
+window.guardarCambiosPedidoBD = function(codigo) {
+    const destino = document.getElementById('env-destino')?.value.trim();
+    const estado = document.getElementById('env-estado')?.value;
+    const insumos = document.getElementById('env-insumos')?.value.trim();
+    const total = document.getElementById('env-total')?.value.trim();
+
+    const formData = new FormData();
+    formData.append('id', codigo); // Enviamos el identificador único (ENV-XXX)
+    formData.append('destino', destino);
+    formData.append('estado', estado);
+    formData.append('insumos', insumos);
+    formData.append('total', total);
+
+    fetch('api/editar_pedido.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (typeof closeModal === 'function') closeModal('modal-env');
+            location.reload(); // Recargamos para ver la actualización reflejada de inmediato
+        } else {
+            alert("Error al actualizar pedido: " + data.message);
+        }
+    })
+    .catch(err => console.error("Error de red en envíos:", err));
+};
+// ── MÓDULO DE ENVÍOS (Lector de fila dinámico para el Lápiz de Edición) ──
+// ── MÓDULO DE ENVÍOS (Lápiz de Edición Real Reparado Celda por Celda) ──
+window.verPedidoFicha = function(fila) {
+    if (!fila) return;
+    const celdas = fila.getElementsByTagName('td');
+    if (celdas.length < 3) return;
+
+    // 1. Extraemos los textos de la fila de forma segura e independiente del orden
+    const codigoReal  = celdas[0].innerText.trim(); // Código ENV-XXX siempre en la primera celda
+    const destinoReal = celdas[1].innerText.trim(); // Nombre del destino en la segunda celda
+    
+    // Para el total, recorremos las celdas buscando la que tenga el signo de pesos ($)
+    let totalReal = "0.00";
+    for (let i = 0; i < celdas.length; i++) {
+        if (celdas[i].innerText.includes('$')) {
+            totalReal = celdas[i].innerText.replace('$', '').replace(',', '').trim();
+            break;
+        }
+    }
+
+    // 2. Inyectamos la información dentro de los inputs de tu modal original 'modal-env'
+    const inputDestino = document.getElementById('env-destino');
+    const inputTotal   = document.getElementById('env-total');
+
+    if (inputDestino) inputDestino.value = destinoReal;
+    if (inputTotal)   inputTotal.value = totalReal;
+
+    // 3. Ajustamos el botón azul del modal para apuntar al guardado asíncrono
+    const botonModal = document.querySelector('#modal-env .btn-primary');
+    if (botonModal) {
+        botonModal.innerText = "Actualizar Envío";
+        botonModal.setAttribute('onclick', `guardarCambiosPedidoBD('${codigoReal}')`);
+    }
+
+    // 4. Abrimos el modal visual de forma nativa en tu frontend
+    if (typeof openModal === 'function') openModal('modal-env');
 };
